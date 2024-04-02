@@ -24,7 +24,7 @@ class ToTable() :
         else:
             self.level = [0,1]
             self.level_transpose = [1,0]
-        self.save_path = os.path.join('results', 'tables')
+        self.save_path = os.path.join('visualisation','results', 'tables')
         self.save_file_name_df = "full_result.txt"
         self.save_file_name_average_ranking_df_archi = 'average_ranking_archi.txt'
         self.save_file_name_average_ranking_df_pooling = 'average_ranking_pooling.txt'
@@ -258,6 +258,7 @@ class ToTable() :
         Save the dataframe as a tex code in a txt file given
         the name of the directory and the name of the file
         """
+        os.makedirs(path_dir, exist_ok=True)
         with open(os.path.join(path_dir, name), 'w') as file:
             file.write(df.to_latex(multirow=True,index_names=False))
 
