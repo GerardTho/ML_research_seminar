@@ -3,15 +3,15 @@ model:
   output_results_path: model/results
   dataset_path: data/TUDataset
   dataset: ENZYMES
-  nb_of_splits: 10  # Number of times the model is going to be trained on shuffled data in order to average the test value at the end
+  nb_of_splits: 3  # Number of times the model is going to be trained on shuffled data in order to average the test value at the end
   verbose: 1
   max_epochs: 200
-  patience: 20
+  patience: 10
   device: 
   lr: 0.005
-  hidden_channels: 64
+  hidden_channels: 16
   convolution_layer: GCN
-  attention_heads: 4
+  attention_heads: 2
   global_pooling_layer: mean
   local_pooling_layer:
   alpha: 1e-2

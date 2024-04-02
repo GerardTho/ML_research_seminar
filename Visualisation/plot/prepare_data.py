@@ -12,8 +12,8 @@ class Prepare :
 
     def __init__(self) :
 
-        self._path_list_dict = os.path.join("..", "model", "results")
-        self._path_homophily = os.path.join("..", "homophily", "homophily_data.csv")
+        self._path_list_dict = os.path.join("model", "results")
+        self._path_homophily = os.path.join("data/homophily", "homophily_data.csv")
 
         # taken from https://chrsmrrs.github.io/datasets/docs/datasets/
         # for each dataset, the tuple of the average number of nodes and

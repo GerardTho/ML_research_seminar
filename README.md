@@ -1,5 +1,10 @@
-# ML_research_seminar
-This will contain all the file for the M2DS course : ML research seminar
+# Graph Neural Networks for Graph Classification Benchmark
+
+This project aims to compare the interactions between convolutional, pooling and readout layers on a graph classification task.
+
+![plot](./images/standard_archi.png)
+
+This is a simplified version of an original research project done for the M2DS course : ML research seminar (https://github.com/AntoineTSP/ML_research_seminar/tree/main).
 
 # To use training_script
 
@@ -36,4 +41,6 @@ One need to place the basic config templates inside the folder for each differen
 
 # To do list
 
-- Replace those ugly prints by a logger
+Remove the data from the git and put it on the cloud
+Create loggers (instead of print)
+Create a general config file which will monitor all the paths

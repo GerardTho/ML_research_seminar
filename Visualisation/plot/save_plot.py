@@ -15,6 +15,10 @@ class Plot :
         self.set_sorted_list_dict()
         self.set_worst_best_acc_per_dataset()
 
+    def save_fig_in_folder(self, path) -> None:
+        print("\\".join(path.split("\\")[:-1]))
+        os.makedirs("\\".join(path.split("\\")[:-1]), exist_ok=True)
+        plt.savefig(path)
 
     def set_sorted_list_dict(self) -> None :
         """
@@ -96,8 +100,9 @@ class Plot :
                 )
 
                     
-                plt.savefig(
-                os.path.join("results",
+                self.save_fig_in_folder(
+                os.path.join("visualisation",
+                            "results",
                              "losses",
                              kind, 
                              f"{dic['dataset']}_{dic['convolution_layer']}_" \
@@ -138,8 +143,9 @@ class Plot :
                     f"{dic['local_pooling_layer']}"
                     )
                     
-                plt.savefig(
-                os.path.join("results",
+                self.save_fig_in_folder(
+                os.path.join("visualisation",
+                            "results",
                              "acc",
                              kind, 
                              f"{dic['dataset']}_{dic['convolution_layer']}_" \
@@ -210,8 +216,9 @@ class Plot :
 
                 plt.tight_layout()
 
-                plt.savefig(
-                os.path.join("results",
+                self.save_fig_in_folder(
+                os.path.join("visualisation",
+                            "results",
                              "acc_and_loss",
                              kind, 
                              f"{dic['dataset']}_{dic['convolution_layer']}_" \
