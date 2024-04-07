@@ -160,5 +160,6 @@ cython_debug/
 #.idea/
 
 model/weights
-processed
+data/datasets
+*.csv
 configs/generated
