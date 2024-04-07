@@ -5,6 +5,7 @@ from model.layer_selector import local_pooling_selection, global_pooling_selecti
 import torch_geometric.nn as nn
 import copy
 from torch_geometric import datasets
+from data.data import Dataset
 import os
 import numpy as np
 import json
@@ -129,7 +130,7 @@ def train_model_from_config(file_path):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
   verbose = config.pop("verbose", 2)
-  dataset_path = config.pop("dataset_path", "data/TUDataset")
+  dataset_path = config.pop("dataset_path", "data/datasets")
   location = dataset_path.split("/")[-1]
   nb_of_splits = config.pop("nb_of_splits", 10)
   hidden_channels = config.pop("hidden_channels", 32)
@@ -153,7 +154,7 @@ def train_model_from_config(file_path):
     torch.backends.cudnn.deterministic = True
 
   # Loading the dataset with the string
-  dataset = eval("datasets."+location)(dataset_path, name=dataset_name)
+  dataset = Dataset(dataset_path, name=dataset_name)
 
   best_test_acc = 0
   test_accuracy_list = [] 
