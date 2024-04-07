@@ -7,13 +7,25 @@ from visualisation.plot import prepare_data, to_table, save_plot
 from data.data import create_dataset
 from data.utils import download_S3_folder
 
-global_pooling_layer_to_test = ["mean", "max"]
-local_pooling_layers_to_test = ["SAG","TOPK", None]
-convolution_layers_to_test = ["GCN", "GAT", "GINConv"]
+import argparse
 
-bucket="tgerard"
-S3_directory="diffusion/data/datasets/"
-local_directory="data/datasets/"
+parser = argparse.ArgumentParser(description='Process a YAML configuration file and output the results to a JSON file.')
+parser.add_argument('-c', '--config', default="configs/config.yml", help='Path to the YAML configuration file')
+args = parser.parse_args()
+
+file_path=args.config
+
+with open(file_path, 'r') as file:
+    config = yaml.safe_load(file)
+
+global_pooling_layer_to_test = config.pop("global_pooling_layer_to_test", ["mean", "max"])
+local_pooling_layers_to_test = config.pop("local_pooling_layers_to_test", ["SAG","TOPK"])
+local_pooling_layers_to_test.append(None)
+convolution_layers_to_test = config.pop("convolution_layers_to_test", ["GCN", "GAT", "GINConv"])
+
+bucket=config.pop("bucket", "tgerard")
+S3_directory=config.pop("S3_directory", "diffusion/datasets/")
+local_directory=config.pop("local_directory", "data/datasets/")
 
 # Download data
 
@@ -28,15 +40,15 @@ configs_path = os.listdir(path_templates)
 
 for config_path in configs_path:
     if config_path.endswith(".yml"):
-        with open(os.path.join(path_templates,config_path), 'r') as config_file:
+        with open(os.path.join(path_templates, config_path), 'r') as config_file:
             config_model = yaml.safe_load(config_file)
     
         # Recreate the dataset from the graphs
         dataset_name = config_model["model"]["dataset"]
         dataset_path = config_model["model"]["dataset_path"]
-        os.makedirs(os.path.join(dataset_path,dataset_name,"processed"), exist_ok=True)
+        os.makedirs(os.path.join(dataset_path, dataset_name, "processed"), exist_ok=True)
         create_dataset(dataset_path, dataset_name)
-        get_homophily('datasets' , dataset_name)
+        get_homophily('datasets', dataset_name)
 
         for convolution_layer in convolution_layers_to_test:
             config_model["model"]["convolution_layer"] = convolution_layer

@@ -14,7 +14,7 @@ def get_homophily(name_location,name_dataset,seed_id=12345):
     # Check if the file exists
     file_exists = os.path.exists(csv_file)
     
-    # Open CSV file in append mode if it exists, otherwise in write mode
+    # Open CSV file
     mode = 'a' if file_exists else 'w'
     
     dataset = Dataset(os.path.join("data", name_location), name=name_dataset)

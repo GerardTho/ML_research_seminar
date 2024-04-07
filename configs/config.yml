@@ -1,0 +1,7 @@
+global_pooling_layer_to_test: ["mean", "max"]
+local_pooling_layers_to_test: ["SAG","TOPK"]
+convolution_layers_to_test: ["GCN", "GAT", "GINConv"]
+
+bucket: "tgerard"
+S3_directory: "diffusion/datasets/"
+local_directory: "data/datasets/"
