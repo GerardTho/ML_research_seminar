@@ -8,8 +8,14 @@ website:
     align: center 
     collapse-below: lg
     left:
-      - href: index.qmd
-        text: Home
+      - href: chapters/Introduction.qmd
+        text: Introduction
+      - href: chapters/Framework.qmd
+        text: Framework
+      - href: chapters/Empirical results.qmd
+        text: Empirical results
+      - href: chapters/Conclusion.qmd
+        text: Conclusion
 
 format:
   html:

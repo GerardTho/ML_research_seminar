@@ -1,0 +1,61 @@
+---
+title: "Framework"
+---
+
+# Framework
+
+In this section, we will explain how our model works. We will cover the generic architecture of a graph neural network (GNN), provide definitions for some key concepts, and explain four different pooling techniques.
+
+## Generic Architecture of a GNN
+
+A GNN is a neural network architecture designed to operate on graph-structured data. The generic architecture of a GNN consists of several layers, each of which performs a specific function.
+
+![Generic architecture of a GNN](../images/standard_archi.png)
+
+The first layer is the input layer, which takes in the graph data and node features. The second layer is the convolution layer, which applies a convolution operation to capture local dependencies between neighboring nodes in the graph. The third layer is the local pooling layer, which reduces the dimensionality of the node representations by pooling them together within local neighborhoods. The fourth layer is the global pooling (readout) layer, which transforms the entire graph into a single vector representation. The final layer is the MLP classification layer, which produces the desired output based on the graph representation.
+
+## Key Definitions
+
+In this section, we will provide definitions for some key concepts used in our model.
+
+### Definition 1
+
+$$\text{Definition 1}$$
+
+### Definition 2
+
+$$\text{Definition 2}$$
+
+### Definition 3
+
+$$\text{Definition 3}$$
+
+## Pooling Techniques
+
+In this section, we will explain four different pooling techniques used in our model.
+
+### Top-K Pooling Operator (TopKPool)
+
+![Top-K Pooling Operator (TopKPool)](../images/topKPooling.png)
+
+The Top-K Pooling operator retains only the top-K nodes with the highest scores, as determined by a scoring function. The scoring function can be based on various factors, such as node degree or feature importance. By retaining only the top-K nodes, Top-K Pooling reduces the dimensionality of the node representations while preserving the most important information.
+
+### Self-Attention Graph Pooling (SAGPool)
+
+![Self-Attention Graph Pooling (SAGPool)](../images/selfAttentionGraphPooling.png)
+
+Self-Attention Graph Pooling (SAGPool) is a pooling technique that uses self-attention mechanisms to assign scores to nodes. The scores are used to select the top-K nodes for pooling, similar to Top-K Pooling. However, unlike Top-K Pooling, SAGPool takes into account the relationships between nodes when assigning scores. This allows SAGPool to capture more complex dependencies between nodes.
+
+### MEWIS Pool (Maximum Entropy Weighted Independent Set Pooling)
+
+![MEWIS Pool (Maximum Entropy Weighted Independent Set Pooling)](../images/MEWIS.png)
+
+MEWIS Pool is a pooling technique that maximizes the Shannon Entropy of the selected nodes. The Shannon Entropy is a measure of the uncertainty or randomness of a set of nodes. By selecting nodes that maximize the Shannon Entropy, MEWIS Pool aims to capture a diverse set of nodes that cover different regions of the graph.
+
+### EDGE Pooling
+
+![EDGE Pooling](../images/EDGE.png)
+
+EDGE Pooling is a pooling technique that pairs nodes based on scores. The scores can be based on various factors, such as node degree or feature importance. EDGE Pooling then merges the paired nodes into a single node, reducing the dimensionality of the node representations. EDGE Pooling can be seen as a form of hierarchical clustering, where nodes are merged based on their similarity.
+
+Each of these pooling techniques has its own strengths and weaknesses, and the choice of pooling technique depends on the specific characteristics of the graph data and the desired outcome.
