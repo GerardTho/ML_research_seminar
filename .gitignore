@@ -163,3 +163,10 @@ model/weights
 data/datasets
 *.csv
 configs/generated
+
+# Quarto website
+
+/.quarto/
+_site/
+*_files
+*.html

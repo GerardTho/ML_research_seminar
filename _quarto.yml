@@ -1,0 +1,21 @@
+project:
+  type: website
+
+website:
+  title: "Graph Neural Networks"
+  navbar:
+    background: "#447099"
+    align: center 
+    collapse-below: lg
+    left:
+      - href: index.qmd
+        text: Home
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+
