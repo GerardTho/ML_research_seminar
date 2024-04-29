@@ -1,11 +1,11 @@
 """A simple API to expose our trained RandomForest model for Tutanic survival."""
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi import FastAPI, File, UploadFile
+from typing import Annotated
 from model import GNN_model
 import torch
-from joblib import load
 import pickle
+import os
+import json
 
 import pandas as pd
 
@@ -31,25 +31,38 @@ def show_welcome_page():
         "Model_version": "0.1",
     }
 
+@app.post('/best_model',tags=['Best model'])
+async def bestmodel(
+    mol_type: str
+) -> dict :
+    if mol_type not in ['ENZYMES','MUTAG','PROTEINS'] :
+        raise ValueError('Wrong molecule type')
+    
+    results_path = 'model/results/'
+    results_dicts = [os.path.join(results_path, i) for i in os.listdir(results_path) if os.path.isfile(os.path.join(results_path, i)) and mol_type in i]
 
-@app.get("/predict", tags=["Predict"])
+    best_model = {}
+    best_mean = 0
+
+    for dico in results_dicts:
+        f = open(dico)
+        dico_result = json.load(f)
+        if dico_result['mean_accuracy'] > best_mean:
+            best_mean = dico_result['mean_accuracy']
+            best_model = dico_result
+    
+    return best_model
+
+
+@app.post("/predict", tags=["Predict"])
 async def predict(
-    index=0
+    file: UploadFile,
+    mol_type: str
 ) -> int:
-    """
-    """
 
-    graph_file = open('data/datasets/ENZYMES/graphs/graph_'+str(index)+'.pickle', mode='rb')
-    graph = pickle.load(graph_file)
+    if mol_type not in ['ENZYMES','MUTAG','PROTEINS'] :
+        raise ValueError('Wrong molecule type')
+
+    graph = pickle.load(file.file)
     out, loss = model(graph['x'], graph['edge_index'], None)
     return out.argmax(dim=1)
-
-
-@app.get("/docs", include_in_schema=False)
-async def custom_swagger_ui_html(req: Request):
-    root_path = req.scope.get("root_path", "").rstrip("/")
-    openapi_url = root_path + app.openapi_url
-    return get_swagger_ui_html(
-        openapi_url=openapi_url,
-        title="API",
-    )
