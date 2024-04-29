@@ -5,7 +5,7 @@ model:
   dataset: PROTEINS
   nb_of_splits: 3  # Number of times the model is going to be trained on shuffled data in order to average the test value at the end
   verbose: 1
-  max_epochs: 200
+  max_epochs: 10
   patience: 10
   device: 
   lr: 0.005
