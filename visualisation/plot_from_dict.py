@@ -10,6 +10,9 @@ import pandas as pd
 
 from collections import defaultdict
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_convolution_mapping(list_dict: List[Dict]) -> Tuple[List, Dict, List]:
     """
@@ -330,7 +333,7 @@ def to_table(list_dict: List[Dict], per_dataset=False) -> pd.DataFrame:
             {"dataset": "Dataset B", "global_pooling_layer": "Sum", "local_pooling_layer": "Avg", "mean_accuracy": 0.92, "std_accuracy": 0.02}
         ]
         df = to_table(list_dict)
-        print(df)
+        logger.info(df)
 
     """
     dic_results = {
@@ -575,7 +578,7 @@ def plot_bar_dataset(
                     **kwargs1,
                 )
 
-                # print the mean accuracy in the middle of the bars
+                # logger.info the mean accuracy in the middle of the bars
                 offset_val = offset if len(keys) > 1 else 0.0
                 for j, accuracy in enumerate(accuracies):
                     ax.annotate(
@@ -728,7 +731,7 @@ def get_worst_best_acc_per_dataset(list_dict, datasets):
 
 def plot_acc_parameters(list_dict):
     if not list_dict:
-        print("Error: Empty list")
+        logger.info("Error: Empty list")
         return
 
     list_dict = sort_list_dict(list_dict)
@@ -811,7 +814,7 @@ def plot_acc_time_epoch(
     save_dir="acc_train_time_per_epoch",
 ):
     if not list_dict:
-        print("Error: Empty list")
+        logger.info("Error: Empty list")
         return
 
     list_dict = sort_list_dict(list_dict)

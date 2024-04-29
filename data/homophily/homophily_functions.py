@@ -6,6 +6,9 @@ import torch_geometric
 from torch_geometric.utils import homophily
 import csv
 from data.data import Dataset
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_homophily(name_location,name_dataset,seed_id=12345):
     # Name of the CSV file
@@ -64,13 +67,13 @@ def get_homophily(name_location,name_dataset,seed_id=12345):
         for row in line_csv:
             writer.writerow(row)
 
-    print("Name of the dataset: " + name_dataset)
-    print("Size of the dataset: " + str(size_dataset))
-    print("Number of features: " + str(nb_features))
-    print("Number of classes: " + str(nb_class))
-    print(f'Number of training graphs: {len(train_dataset)}')
-    print(f'Number of test graphs: {len(test_dataset)}')
-    print("Homophily with the edge formula (train/test): " + str(homophily_edge_train) + " | " + str(homophily_edge_test))
-    print("Homophily with the node formula (train/test): " + str(homophily_node_train) + " | " + str(homophily_node_test))
-    print("Homophily with the edge_insensitive formula (train/test): " + str(homophily_edge_insensitive_train) + " | " + str(homophily_edge_insensitive_test))
-    print("CSV file created successfully:", csv_file)
+    logger.info("Name of the dataset: " + name_dataset)
+    logger.info("Size of the dataset: " + str(size_dataset))
+    logger.info("Number of features: " + str(nb_features))
+    logger.info("Number of classes: " + str(nb_class))
+    logger.info(f'Number of training graphs: {len(train_dataset)}')
+    logger.info(f'Number of test graphs: {len(test_dataset)}')
+    logger.info("Homophily with the edge formula (train/test): " + str(homophily_edge_train) + " | " + str(homophily_edge_test))
+    logger.info("Homophily with the node formula (train/test): " + str(homophily_node_train) + " | " + str(homophily_node_test))
+    logger.info("Homophily with the edge_insensitive formula (train/test): " + str(homophily_edge_insensitive_train) + " | " + str(homophily_edge_insensitive_test))
+    logger.info("CSV file created successfully:" + str(csv_file))

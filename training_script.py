@@ -14,6 +14,9 @@ import argparse
 import time
 from tqdm import tqdm
 from IPython.display import clear_output
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Trainer():
   
@@ -82,6 +85,7 @@ class Trainer():
     best_acc = 0
     min_val_loos = np.inf
     iterations_WO_improvements = 0
+
     with tqdm(range(1, self.nb_max_epochs), unit='epoch') as bar:
       for epoch in range(1, self.nb_max_epochs):
         bar.set_description(f'Epoch {epoch}')
@@ -105,12 +109,10 @@ class Trainer():
         else:
           iterations_WO_improvements += 1
 
+        logger.info(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}')
+
         if iterations_WO_improvements > self.patience:
           break
-
-        if self.verbose>1:
-          # Print should be replaced by logs ideally
-          print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}')
 
     test_acc, _ = self.test(best_model, self.test_loader, self.device)
     last_epoch = epoch
@@ -159,8 +161,10 @@ def train_model_from_config(file_path):
   best_test_acc = 0
   test_accuracy_list = [] 
     
-  print('\n' + str(dataset_name))
-  print(conv_layer, global_pooling_layer, local_pooling_layer)
+  logger.info('\n' + str(dataset_name))
+  logger.info("Convolutional layer :" + str(conv_layer))
+  logger.info("Pooling layer : " + str(global_pooling_layer))
+  logger.info("Readout layer : " + str(local_pooling_layer))
     
   for i in range(nb_of_splits):
     torch.manual_seed(12345+i)
@@ -178,8 +182,7 @@ def train_model_from_config(file_path):
                                "test_accuracy":test_acc,
                                "last_epoch":last_epoch, 
                                "train_time_per_epoch": train_time}
-    if verbose > 0:
-      print(f'Model number: {i:02d}, Train acc: {train_accuracies[-1]:.4f}, Test Acc: {test_acc:.4f}, stopped at epoch {last_epoch} -> best val loss: {min_val_loss:.4f}, best val acc: {best_acc:.4f}')
+    logger.info(f'Model number: {i:02d}, Train acc: {train_accuracies[-1]:.4f}, Test Acc: {test_acc:.4f}, stopped at epoch {last_epoch} -> best val loss: {min_val_loss:.4f}, best val acc: {best_acc:.4f}')
     test_accuracy_list.append(test_acc)
 
   # Compute accuracies and informations about the model
@@ -188,7 +191,7 @@ def train_model_from_config(file_path):
   result["std_accuracy"] = np.std(test_accuracy_list)
 
   # Model saving
-  print(f'Mean Test Acc: {result["mean_accuracy"]:.4f}, Std Test Acc: {result["std_accuracy"]:.4f}')
+  logger.info(f'Mean Test Acc: {result["mean_accuracy"]:.4f}, Std Test Acc: {result["std_accuracy"]:.4f}')
   
   os.makedirs(output_model_path, exist_ok = True) 
 
