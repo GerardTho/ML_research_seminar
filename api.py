@@ -2,16 +2,13 @@
 from fastapi import FastAPI, File, UploadFile
 from typing import Annotated
 from model import GNN_model
+from model.layer_selector import local_pooling_selection, global_pooling_selection, conv_selection
 import torch
 import pickle
 import os
 import json
 
 import pandas as pd
-
-model = GNN_model.GCN(num_node_features=3, num_classes=6, hidden_channels=16)
-model.load_state_dict(torch.load('model/weights/ENZYMES_GCN_mean_None'))
-model.eval()
 
 app = FastAPI(
     title="blbllb",
@@ -31,10 +28,10 @@ def show_welcome_page():
         "Model_version": "0.1",
     }
 
-@app.post('/best_model',tags=['Best model'])
-async def bestmodel(
+
+def find_bestmodel(
     mol_type: str
-) -> dict :
+) -> dict:
     if mol_type not in ['ENZYMES','MUTAG','PROTEINS'] :
         raise ValueError('Wrong molecule type')
     
@@ -53,6 +50,17 @@ async def bestmodel(
     
     return best_model
 
+@app.post('/best_model', tags=['Best model'])
+async def bestmodel(
+    mol_type: str
+) -> dict:
+    return find_bestmodel(mol_type)
+
+dico_molecules = {
+    'ENZYMES': {'Nb_class': 6, 'Nb_features': 3},
+    'MUTAG': {'Nb_class': 6, 'Nb_features': 3},
+    'PROTEINS': {'Nb_class': 2, 'Nb_features': 3},
+}
 
 @app.post("/predict", tags=["Predict"])
 async def predict(
@@ -63,6 +71,27 @@ async def predict(
     if mol_type not in ['ENZYMES','MUTAG','PROTEINS'] :
         raise ValueError('Wrong molecule type')
 
+    best_model_config = find_bestmodel(mol_type)
     graph = pickle.load(file.file)
+
+    conv_method = conv_selection(best_model_config['convolution_layer'], best_model_config['attention_heads'])
+    global_pool_method = global_pooling_selection(best_model_config['global_pooling_layer'])
+    local_pool_method, dic_conversion_layer = local_pooling_selection(best_model_config['local_pooling_layer'], device='cpu')
+
+    model = GNN_model.GCN(
+        num_node_features=dico_molecules[mol_type]['Nb_features'],
+        num_classes=dico_molecules[mol_type]['Nb_class'],
+        hidden_channels=best_model_config['hidden_channels'],
+        conv_method=conv_method,
+        global_pool_method=global_pool_method,
+        local_pool_method=local_pool_method,
+        dic_conversion_layer=dic_conversion_layer
+        )
+
+    model.load_state_dict(torch.load(
+        f"model/weights/{mol_type}_{best_model_config['convolution_layer']}_{best_model_config['global_pooling_layer']}_{best_model_config['local_pooling_layer']}"
+        ))
+    model.eval()
+
     out, loss = model(graph['x'], graph['edge_index'], None)
     return out.argmax(dim=1)
