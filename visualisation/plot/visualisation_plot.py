@@ -10,6 +10,9 @@ from matplotlib.transforms import Bbox
 from collections import defaultdict
 import os
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class VisualisationPlot() :
 
@@ -506,7 +509,7 @@ class VisualisationPlot() :
                         **kwargs1,
                     )
 
-                    # print the mean accuracy in the middle of the bars
+                    # logger.info the mean accuracy in the middle of the bars
                     offset_val = offset if len(keys) > 1 else 0.0
                     for j, accuracy in enumerate(accuracies):
                         ax.annotate(

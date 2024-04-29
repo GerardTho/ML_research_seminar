@@ -39,8 +39,4 @@ python pipeline.py
 
 One need to place the basic config templates inside the folder for each different dataset
 
-# To do list
-
-Remove the data from the git and put it on the cloud
-Create loggers (instead of print)
-Create a general config file which will monitor all the paths
+# Project organization

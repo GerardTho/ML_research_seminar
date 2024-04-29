@@ -14,12 +14,19 @@ import argparse
 import time
 from tqdm import tqdm
 from IPython.display import clear_output
+import logging
+
+logger = logging.getLogger(__name__)
+
+from torch.utils.tensorboard import SummaryWriter
 
 class Trainer():
   
-  def __init__(self, dataset, batch_size, lr, conv_layer, global_pooling_layer, local_pooling_layer, attention_heads, hidden_channels, nb_max_epochs, patience, verbose, device, alpha=1e-2):
+  def __init__(self, dataset, batch_size, lr, conv_layer, global_pooling_layer, local_pooling_layer, attention_heads, hidden_channels, nb_max_epochs, patience, verbose, device, writer, split_nb, alpha=1e-2):
     # Creation of the dataset
     n = len(dataset)
+    self.dataset_name = dataset.name
+    self.split_nb = split_nb
     train_dataset = dataset[:int(0.6*n)]
     val_dataset = dataset[int(0.6*n):int(0.8*n)]
     test_dataset = dataset[int(0.8*n):]
@@ -30,6 +37,10 @@ class Trainer():
 
     # Model build
     self.device = device
+    self.local_pooling_layer = local_pooling_layer
+    self.convolutional_layer = conv_layer
+    self.global_pooling_layer = global_pooling_layer
+
     local_pooling, dic_conversion_layer = local_pooling_selection(local_pooling_layer, device=device)
     convolutional_layer=conv_selection(conv_layer, attention_heads)
 
@@ -47,7 +58,9 @@ class Trainer():
     self.alpha = alpha
     self.nb_max_epochs = nb_max_epochs
     self.patience = patience
+
     self.verbose = verbose
+    self.writer = writer
 
   def train(self):
       self.model.train()
@@ -82,9 +95,10 @@ class Trainer():
     best_acc = 0
     min_val_loos = np.inf
     iterations_WO_improvements = 0
+
     with tqdm(range(1, self.nb_max_epochs), unit='epoch') as bar:
       for epoch in range(1, self.nb_max_epochs):
-        bar.set_description(f'Epoch {epoch}')
+        bar.set_description(f'{self.dataset_name} {self.convolutional_layer} {self.local_pooling_layer} {self.global_pooling_layer} - Split {self.split_nb} - Epoch {epoch}')
         self.train()
         train_acc, train_loss = self.test(self.model, self.train_loader, self.device)
         val_acc, val_loss = self.test(self.model, self.val_loader, self.device)
@@ -96,6 +110,23 @@ class Trainer():
         bar.update(1)
         clear_output(wait=False)
 
+        # Tensorboard dashboard
+        self.writer.add_scalar(f'{self.dataset_name}/split_{self.split_nb}/training_loss',
+                train_loss,
+                epoch)
+
+        self.writer.add_scalar(f'{self.dataset_name}/split_{self.split_nb}/validation_loss',
+                val_loss,
+                epoch)
+
+        self.writer.add_scalar(f'{self.dataset_name}/split_{self.split_nb}/training_accuracy',
+                train_acc,
+                epoch)
+
+        self.writer.add_scalar(f'{self.dataset_name}/split_{self.split_nb}/validation_accuracy',
+                val_acc,
+                epoch)
+
         # Early stopping
         if val_acc >= best_acc:
           best_acc = val_acc
@@ -105,12 +136,10 @@ class Trainer():
         else:
           iterations_WO_improvements += 1
 
+        logger.info(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}')
+
         if iterations_WO_improvements > self.patience:
           break
-
-        if self.verbose>1:
-          # Print should be replaced by logs ideally
-          print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}')
 
     test_acc, _ = self.test(best_model, self.test_loader, self.device)
     last_epoch = epoch
@@ -159,15 +188,18 @@ def train_model_from_config(file_path):
   best_test_acc = 0
   test_accuracy_list = [] 
     
-  print('\n' + str(dataset_name))
-  print(conv_layer, global_pooling_layer, local_pooling_layer)
-    
+  logger.info('\n' + dataset_name)
+  logger.info("Convolutional layer :" + conv_layer)
+  logger.info("Pooling layer : " + global_pooling_layer)
+  logger.info("Readout layer : " + str(local_pooling_layer))
+
+  writer = SummaryWriter(f'logs/runs/{conv_layer}_{global_pooling_layer}_{local_pooling_layer}')
+
   for i in range(nb_of_splits):
     torch.manual_seed(12345+i)
     torch.cuda.manual_seed_all(12345+i)
     dataset = dataset.shuffle()
-
-    trainer = Trainer(dataset, batch_size, lr, conv_layer, global_pooling_layer, local_pooling_layer, attention_heads, hidden_channels, max_epochs, patience, verbose, device, alpha)
+    trainer = Trainer(dataset, batch_size, lr, conv_layer, global_pooling_layer, local_pooling_layer, attention_heads, hidden_channels, max_epochs, patience, verbose, device, writer, i+1, alpha)
     
     # Model training
     best_model, test_acc, train_losses, val_losses, train_accuracies, val_accuracies, last_epoch, min_val_loss, best_acc, train_time = trainer.training_loop()
@@ -178,8 +210,7 @@ def train_model_from_config(file_path):
                                "test_accuracy":test_acc,
                                "last_epoch":last_epoch, 
                                "train_time_per_epoch": train_time}
-    if verbose > 0:
-      print(f'Model number: {i:02d}, Train acc: {train_accuracies[-1]:.4f}, Test Acc: {test_acc:.4f}, stopped at epoch {last_epoch} -> best val loss: {min_val_loss:.4f}, best val acc: {best_acc:.4f}')
+    logger.info(f'Model number: {i:02d}, Train acc: {train_accuracies[-1]:.4f}, Test Acc: {test_acc:.4f}, stopped at epoch {last_epoch} -> best val loss: {min_val_loss:.4f}, best val acc: {best_acc:.4f}')
     test_accuracy_list.append(test_acc)
 
   # Compute accuracies and informations about the model
@@ -188,7 +219,7 @@ def train_model_from_config(file_path):
   result["std_accuracy"] = np.std(test_accuracy_list)
 
   # Model saving
-  print(f'Mean Test Acc: {result["mean_accuracy"]:.4f}, Std Test Acc: {result["std_accuracy"]:.4f}')
+  logger.info(f'Mean Test Acc: {result["mean_accuracy"]:.4f}, Std Test Acc: {result["std_accuracy"]:.4f}')
   
   os.makedirs(output_model_path, exist_ok = True) 
 
