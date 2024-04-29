@@ -9,7 +9,6 @@ from data.utils import download_S3_folder
 import logging
 import argparse
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process a YAML configuration file and output the results to a JSON file.')
     parser.add_argument('-c', '--config', default="configs/config.yml", help='Path to the YAML configuration file')

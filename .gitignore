@@ -159,12 +159,18 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# results
 model/weights
 data/datasets
 *.csv
 configs/generated
 *.png
+results
+homophily
+
+# logs
 logs
+logs/runs
 
 # Quarto website
 
