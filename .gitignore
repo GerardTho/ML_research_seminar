@@ -163,6 +163,8 @@ model/weights
 data/datasets
 *.csv
 configs/generated
+*.png
+logs
 
 # Quarto website
 
