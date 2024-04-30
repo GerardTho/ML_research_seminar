@@ -50,7 +50,7 @@ def find_bestmodel(
     
     return best_model
 
-@app.post('/best_model', tags=['Best model'])
+@app.get('/best_model', tags=['Best model'])
 async def bestmodel(
     mol_type: str
 ) -> dict:

@@ -1,8 +1,19 @@
-from utils import download_S3_folder
 from data import create_dataset
 import argparse
 import yaml
 import os
+import s3fs
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def download_S3_folder(bucket, S3_directory, local_directory):
+    S3_ENDPOINT_URL = "https://" + os.environ["AWS_S3_ENDPOINT"]
+    fs = s3fs.S3FileSystem(client_kwargs={'endpoint_url': S3_ENDPOINT_URL}, 
+                            key = os.environ["AWS_ACCESS_KEY_ID"], 
+                            secret = os.environ["AWS_SECRET_ACCESS_KEY"], 
+                            token = os.environ["AWS_SESSION_TOKEN"])    
+    fs.download(f'{bucket}/{S3_directory}', local_directory, recursive=True)
 
 if __name__ == "__main__":
 

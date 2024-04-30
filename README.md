@@ -6,6 +6,10 @@ This project aims to compare the interactions between convolutional, pooling and
 
 This is a simplified version of an original research project done for the M2DS course : ML research seminar (https://github.com/AntoineTSP/ML_research_seminar/tree/main).
 
+# Credentials
+
+If you are not using an ssp cloud service, you might need to add your credentials in a .env file
+
 # Download data
 
 ```
@@ -47,6 +51,14 @@ One need to place the basic config templates inside the folder for each differen
 
 # API
 
+# Docker
 
+```
+docker build . -t gnn  
+```
+
+```
+docker run -p 5000:5000 -p 8000:8000 -it gnn 
+```
 
 # Project organization
