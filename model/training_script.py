@@ -1,6 +1,6 @@
 import torch
 from torch_geometric.loader import DataLoader
-from model.GNN_model import GCN
+from model.GNN_model import GNN
 from model.layer_selector import local_pooling_selection, global_pooling_selection, conv_selection
 import torch_geometric.nn as nn
 import copy
@@ -44,7 +44,7 @@ class Trainer():
     local_pooling, dic_conversion_layer = local_pooling_selection(local_pooling_layer, device=device)
     convolutional_layer=conv_selection(conv_layer, attention_heads)
 
-    self.model = GCN(num_node_features=dataset.num_node_features, 
+    self.model = GNN(num_node_features=dataset.num_node_features, 
                 num_classes=dataset.num_classes, 
                 hidden_channels=hidden_channels,
                 conv_method=convolutional_layer, 
