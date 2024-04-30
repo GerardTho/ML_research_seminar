@@ -16,7 +16,8 @@ class Plot :
         self.set_worst_best_acc_per_dataset()
 
     def save_fig_in_folder(self, path) -> None:
-        os.makedirs("/".join(path.split("\\")[:-1]), exist_ok=True)
+        directory, _ = os.path.split(path)
+        os.makedirs(directory, exist_ok=True)
         plt.savefig(path)
 
     def set_sorted_list_dict(self) -> None :
