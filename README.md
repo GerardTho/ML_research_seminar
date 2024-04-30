@@ -6,6 +6,10 @@ This project aims to compare the interactions between convolutional, pooling and
 
 This is a simplified version of an original research project done for the M2DS course : ML research seminar (https://github.com/AntoineTSP/ML_research_seminar/tree/main).
 
+# Credentials
+
+If you are not using an ssp cloud service, you might need to add your credentials in a .env file
+
 # Download data
 
 ```
