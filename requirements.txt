@@ -10,4 +10,6 @@ argparse>=1.4.0
 ipykernel>=6.29.2
 pandas>=2.2.0
 ipympl>=0.9.3
+uvicorn>=0.29.0
+fastapi>=0.110.2
 tensorboard>=2.16.2

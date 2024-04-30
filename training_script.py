@@ -162,7 +162,7 @@ def train_model_from_config(file_path):
   dataset_path = config.pop("dataset_path", "data/datasets")
   location = dataset_path.split("/")[-1]
   nb_of_splits = config.pop("nb_of_splits", 10)
-  hidden_channels = config.pop("hidden_channels", 32)
+  hidden_channels = config.get("hidden_channels", 32)
 
   result = dict(config)
   dataset_name = config.pop("dataset")
