@@ -1,0 +1,3 @@
+bucket: "tgerard"
+S3_directory: "diffusion/datasets/"
+local_directory: "data/datasets/"

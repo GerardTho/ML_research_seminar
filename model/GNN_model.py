@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.nn import GCNConv, GINConv, global_mean_pool
 
-class GCN(nn.Module):
+class GNN(nn.Module):
     ''' Generic Graph Convolution Network which convolutional layers and pooling layers can be changed'''
     def __init__(self, 
                  num_node_features, 
@@ -14,7 +14,7 @@ class GCN(nn.Module):
                  global_pool_method=global_mean_pool, 
                  local_pool_method=None,
                  dic_conversion_layer=None):
-        super(GCN, self).__init__()
+        super(GNN, self).__init__()
         torch.manual_seed(12345)
 
         # Architecture tests

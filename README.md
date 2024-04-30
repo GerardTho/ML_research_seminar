@@ -6,10 +6,16 @@ This project aims to compare the interactions between convolutional, pooling and
 
 This is a simplified version of an original research project done for the M2DS course : ML research seminar (https://github.com/AntoineTSP/ML_research_seminar/tree/main).
 
+# Download data
+
+```
+python data/download_data.py 
+```
+
 # To use training_script
 
 ```
-python training_script.py -c configs/templates/MUTAG_test_template.yml
+python -m model.training_script -c configs/templates/MUTAG_test_template.yml
 ```
 
 One has to properly fill the yml file. Don't forget to install the yaml module.
@@ -34,9 +40,13 @@ loss at the third place that has to be taken into account.
 # Multiple models training
 
 ```
-python pipeline.py
+python main.py
 ```
 
 One need to place the basic config templates inside the folder for each different dataset
+
+# API
+
+
 
 # Project organization

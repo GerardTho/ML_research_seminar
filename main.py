@@ -1,11 +1,9 @@
 import yaml
 import os
-from training_script import train_model_from_config
+from model.training_script import train_model_from_config
 import torch
 from data.homophily.homophily_functions import get_homophily
 from visualisation.plot import prepare_data, to_table, save_plot
-from data.data import create_dataset
-from data.utils import download_S3_folder
 import logging
 import argparse
 
@@ -28,14 +26,6 @@ if __name__ == '__main__':
     local_pooling_layers_to_test.append(None)
     convolution_layers_to_test = config.pop("convolution_layers_to_test", ["GCN", "GAT", "GINConv"])
 
-    bucket=config.pop("bucket", "tgerard")
-    S3_directory=config.pop("S3_directory", "diffusion/datasets/")
-    local_directory=config.pop("local_directory", "data/datasets/")
-
-    # Download data
-
-    download_S3_folder(bucket, S3_directory, local_directory)
-
     # Define your configuration data
 
     path_templates = "configs/templates"
@@ -51,8 +41,6 @@ if __name__ == '__main__':
             # Recreate the dataset from the graphs
             dataset_name = config_model["model"]["dataset"]
             dataset_path = config_model["model"]["dataset_path"]
-            os.makedirs(os.path.join(dataset_path, dataset_name, "processed"), exist_ok=True)
-            create_dataset(dataset_path, dataset_name)
             get_homophily('datasets', dataset_name)
 
             for convolution_layer in convolution_layers_to_test:

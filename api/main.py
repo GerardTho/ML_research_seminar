@@ -78,7 +78,7 @@ async def predict(
     global_pool_method = global_pooling_selection(best_model_config['global_pooling_layer'])
     local_pool_method, dic_conversion_layer = local_pooling_selection(best_model_config['local_pooling_layer'], device='cpu')
 
-    model = GNN_model.GCN(
+    model = GNN_model.GNN(
         num_node_features=dico_molecules[mol_type]['Nb_features'],
         num_classes=dico_molecules[mol_type]['Nb_class'],
         hidden_channels=best_model_config['hidden_channels'],
