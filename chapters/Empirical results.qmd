@@ -1,0 +1,1 @@
+![Generic architecture of a GNN](../visualisation/results/acc/train/ENZYMES_GCN_None.png)
