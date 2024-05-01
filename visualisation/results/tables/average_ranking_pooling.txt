@@ -1,0 +1,7 @@
+\begin{tabular}{lrrr}
+\toprule
+Dataset & ENZYMES & MUTAG & PROTEINS \\
+\midrule
+None & 1 & 1 & 1 \\
+\bottomrule
+\end{tabular}
