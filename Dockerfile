@@ -14,7 +14,5 @@ COPY configs ./configs
 COPY main.py /main.py
 COPY install.sh /install.sh
 COPY .env .env
-EXPOSE 5000
-EXPOSE 6006
-RUN /bin/bash -c /install.sh
-CMD /bin/bash -c /api/run.sh
+# RUN /bin/bash -c /install.sh
+CMD ["bash", "-c", "./api/run.sh"]

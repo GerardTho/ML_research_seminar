@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: titanic-deployment
+  labels:
+    app: titanic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: titanic
+  template:
+    metadata:
+      labels:
+        app: titanic
+    spec:
+      containers:
+      - name: titanic
+        image: gnn:latest
+        ports:
+        - containerPort: 80
