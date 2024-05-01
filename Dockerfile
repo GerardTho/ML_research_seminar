@@ -15,5 +15,5 @@ COPY main.py /main.py
 COPY install.sh /install.sh
 COPY .env .env
 # RUN /bin/bash -c /install.sh
-EXPOSE 80
+EXPOSE 5000
 CMD ["bash", "-c", "./api/run.sh"]

@@ -58,7 +58,7 @@ docker build . -t gerardtho/gnn
 ```
 
 ```
-docker run -p 5000:80 -it gerardtho/gnn 
+docker run -p 5000:5000 -it gerardtho/gnn 
 ```
 
 # Project organization
