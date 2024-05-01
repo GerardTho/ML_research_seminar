@@ -23,7 +23,7 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - run: pip install -r requirements.txt
-      - run: /bin/bash -c /install.sh
+      - run: bash install.sh
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
