@@ -14,5 +14,5 @@ COPY configs ./configs
 COPY main.py /main.py
 COPY install.sh /install.sh
 COPY .env .env
-# RUN /bin/bash -c /install.sh
+RUN /install.sh
 CMD ["bash", "-c", "./api/run.sh"]
