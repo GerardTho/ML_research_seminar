@@ -12,8 +12,9 @@ COPY visualisation ./visualisation
 COPY api ./api
 COPY configs ./configs
 COPY main.py /main.py
-COPY run.sh /run.sh
+COPY install.sh /install.sh
 COPY .env .env
 EXPOSE 5000
 EXPOSE 6006
-CMD /bin/bash -c /run.sh
+RUN /bin/bash -c /install.sh
+CMD /bin/bash -c /api/run.sh
