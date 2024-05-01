@@ -1,0 +1,7 @@
+\begin{tabular}{llll}
+\toprule
+Dataset & ENZYMES & MUTAG & PROTEINS \\
+\midrule
+None & GCN & GCN & GCN \\
+\bottomrule
+\end{tabular}

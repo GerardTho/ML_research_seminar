@@ -165,12 +165,10 @@ cython_debug/
 
 # results
 model/weights
+model/results
 data/datasets
 *.csv
 configs/generated
-*.png
-results
-homophily
 
 # logs
 logs
