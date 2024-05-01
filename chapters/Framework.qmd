@@ -21,15 +21,18 @@ In this section, we will provide definitions for the main convolution techniques
 ### Graph Convolutional Network (GCNconv)
 
 $$h_i' = \sigma \left( \sum_{j \in \mathcal{N}_i} \frac{1}{\sqrt{|\mathcal{N}_i| |\mathcal{N}_j|}} W h_j \right)$$
+
 * W: parameters of the layer.
+
 * $h_i$: features at node $i$.
+
 * $\mathcal{N}_i$: neighborhood of node $i$.
 
 Graph Convolutional Network is a type of graph neural network that applies a convolutional filter on the graph nodes, similar to CNNs. The intuition behind GCNconv is that it updates the features of each node by aggregating the features of its neighboring nodes, and then applying a linear transformation to the aggregated features. This process allows the GCNconv to capture the local structural information of the graph and learn node representations that are informative for downstream tasks such as node classification and link prediction.
 
 ### Graph Attention Networks (GAT)
 
-$h'_i = \sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij} \mathbf{W}h_j\right)$
+$$h'_i = \sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij} \mathbf{W}h_j\right)$$
 $\alpha_{ij}$ : attention coefficient indicating the importance of node $j$'s features to node $i$
 $$\alpha_{ij} = \frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_j]\right)\right)}{\sum_{k \in \mathcal{N}_i} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_k]\right)\right)}$$
 
@@ -54,7 +57,7 @@ The Top-K Pooling operator retains only the top-K nodes with the highest scores,
 
 ### Self-Attention Graph Pooling (SAGPool)
 
-![Self-Attention Graph Pooling (SAGPool)](../images/selfAttentionGraphPooling.png)
+![Self-Attention Graph Pooling (SAGPool)](../images/SagPool2.png)
 
 Self-Attention Graph Pooling (SAGPool) is a pooling technique that uses self-attention mechanisms to assign scores to nodes. The scores are used to select the top-K nodes for pooling, similar to Top-K Pooling. However, unlike Top-K Pooling, SAGPool takes into account the relationships between nodes when assigning scores. This allows SAGPool to capture more complex dependencies between nodes.
 

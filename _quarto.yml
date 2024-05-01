@@ -16,6 +16,8 @@ website:
         text: Empirical results
       - href: chapters/Conclusion.qmd
         text: Conclusion
+      - href: chapters/Slides.qmd
+        text: Slides
 
 format:
   html:
