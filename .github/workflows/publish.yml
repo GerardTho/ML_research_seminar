@@ -32,7 +32,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
         run: |
-          install.sh
+          bash install.sh
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
