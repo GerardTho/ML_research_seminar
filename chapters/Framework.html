@@ -152,11 +152,11 @@ window.Quarto = {
   <li><a href="#framework" id="toc-framework" class="nav-link active" data-scroll-target="#framework">Framework</a>
   <ul class="collapse">
   <li><a href="#generic-architecture-of-a-gnn" id="toc-generic-architecture-of-a-gnn" class="nav-link" data-scroll-target="#generic-architecture-of-a-gnn">Generic Architecture of a GNN</a></li>
-  <li><a href="#key-definitions" id="toc-key-definitions" class="nav-link" data-scroll-target="#key-definitions">Key Definitions</a>
+  <li><a href="#convolution-techniques" id="toc-convolution-techniques" class="nav-link" data-scroll-target="#convolution-techniques">Convolution techniques</a>
   <ul class="collapse">
-  <li><a href="#definition-1" id="toc-definition-1" class="nav-link" data-scroll-target="#definition-1">Definition 1</a></li>
-  <li><a href="#definition-2" id="toc-definition-2" class="nav-link" data-scroll-target="#definition-2">Definition 2</a></li>
-  <li><a href="#definition-3" id="toc-definition-3" class="nav-link" data-scroll-target="#definition-3">Definition 3</a></li>
+  <li><a href="#graph-convolutional-network-gcnconv" id="toc-graph-convolutional-network-gcnconv" class="nav-link" data-scroll-target="#graph-convolutional-network-gcnconv">Graph Convolutional Network (GCNconv)</a></li>
+  <li><a href="#graph-attention-networks-gat" id="toc-graph-attention-networks-gat" class="nav-link" data-scroll-target="#graph-attention-networks-gat">Graph Attention Networks (GAT)</a></li>
+  <li><a href="#graph-isomorphism-network-convolution-ginconv" id="toc-graph-isomorphism-network-convolution-ginconv" class="nav-link" data-scroll-target="#graph-isomorphism-network-convolution-ginconv">Graph Isomorphism Network Convolution (GINConv)</a></li>
   </ul></li>
   <li><a href="#pooling-techniques" id="toc-pooling-techniques" class="nav-link" data-scroll-target="#pooling-techniques">Pooling Techniques</a>
   <ul class="collapse">
@@ -193,7 +193,7 @@ window.Quarto = {
 
 <section id="framework" class="level1">
 <h1>Framework</h1>
-<p>In this section, we will explain how our model works. We will cover the generic architecture of a graph neural network (GNN), provide definitions for some key concepts, and explain four different pooling techniques.</p>
+<p>In this section, we will explain how our model works. We will cover the generic architecture of a graph neural network (GNN), as well as provide more in-depth explanations about different convolution and pooling techniques.</p>
 <section id="generic-architecture-of-a-gnn" class="level2">
 <h2 class="anchored" data-anchor-id="generic-architecture-of-a-gnn">Generic Architecture of a GNN</h2>
 <p>A GNN is a neural network architecture designed to operate on graph-structured data. The generic architecture of a GNN consists of several layers, each of which performs a specific function.</p>
@@ -205,25 +205,28 @@ window.Quarto = {
 </div>
 <p>The first layer is the input layer, which takes in the graph data and node features. The second layer is the convolution layer, which applies a convolution operation to capture local dependencies between neighboring nodes in the graph. The third layer is the local pooling layer, which reduces the dimensionality of the node representations by pooling them together within local neighborhoods. The fourth layer is the global pooling (readout) layer, which transforms the entire graph into a single vector representation. The final layer is the MLP classification layer, which produces the desired output based on the graph representation.</p>
 </section>
-<section id="key-definitions" class="level2">
-<h2 class="anchored" data-anchor-id="key-definitions">Key Definitions</h2>
-<p>In this section, we will provide definitions for some key concepts used in our model.</p>
-<section id="definition-1" class="level3">
-<h3 class="anchored" data-anchor-id="definition-1">Definition 1</h3>
-<p><span class="math display">\[\text{Definition 1}\]</span></p>
+<section id="convolution-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="convolution-techniques">Convolution techniques</h2>
+<p>In this section, we will provide definitions for the main convolution techniques we consider.</p>
+<section id="graph-convolutional-network-gcnconv" class="level3">
+<h3 class="anchored" data-anchor-id="graph-convolutional-network-gcnconv">Graph Convolutional Network (GCNconv)</h3>
+<p><span class="math display">\[h_i' = \sigma \left( \sum_{j \in \mathcal{N}_i} \frac{1}{\sqrt{|\mathcal{N}_i| |\mathcal{N}_j|}} W h_j \right)\]</span> * W: parameters of the layer. * <span class="math inline">\(h_i\)</span>: features at node <span class="math inline">\(i\)</span>. * <span class="math inline">\(\mathcal{N}_i\)</span>: neighborhood of node <span class="math inline">\(i\)</span>.</p>
+<p>Graph Convolutional Network is a type of graph neural network that applies a convolutional filter on the graph nodes, similar to CNNs. The intuition behind GCNconv is that it updates the features of each node by aggregating the features of its neighboring nodes, and then applying a linear transformation to the aggregated features. This process allows the GCNconv to capture the local structural information of the graph and learn node representations that are informative for downstream tasks such as node classification and link prediction.</p>
 </section>
-<section id="definition-2" class="level3">
-<h3 class="anchored" data-anchor-id="definition-2">Definition 2</h3>
-<p><span class="math display">\[\text{Definition 2}\]</span></p>
+<section id="graph-attention-networks-gat" class="level3">
+<h3 class="anchored" data-anchor-id="graph-attention-networks-gat">Graph Attention Networks (GAT)</h3>
+<p><span class="math inline">\(h'_i = \sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij} \mathbf{W}h_j\right)\)</span> <span class="math inline">\(\alpha_{ij}\)</span> : attention coefficient indicating the importance of node <span class="math inline">\(j\)</span>’s features to node <span class="math inline">\(i\)</span> <span class="math display">\[\alpha_{ij} = \frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_j]\right)\right)}{\sum_{k \in \mathcal{N}_i} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_k]\right)\right)}\]</span></p>
+<p>Graph Attention Networks (GAT) is a type of graph neural network that uses attention mechanisms to aggregate features from neighboring nodes. The intuition behind GAT is that different neighboring nodes may have different levels of importance when aggregating features for a given node. By using attention coefficients, GAT can learn to weight the contributions of each neighboring node based on their relevance to the target node. This allows GAT to capture complex dependencies between nodes and learn more expressive node representations than other graph neural networks.</p>
 </section>
-<section id="definition-3" class="level3">
-<h3 class="anchored" data-anchor-id="definition-3">Definition 3</h3>
-<p><span class="math display">\[\text{Definition 3}\]</span></p>
+<section id="graph-isomorphism-network-convolution-ginconv" class="level3">
+<h3 class="anchored" data-anchor-id="graph-isomorphism-network-convolution-ginconv">Graph Isomorphism Network Convolution (GINConv)</h3>
+<p><span class="math display">\[\mathbf{h}^{\prime}_i = \text{MLP} \left( (1 + \epsilon) \cdot\mathbf{h}_i + \sum_{j \in \mathcal{N}_i} \mathbf{h}_j \right)\]</span> <span class="math inline">\(\epsilon\)</span> : learnable parameter or a fixed scalar.</p>
+<p>Graph Isomorphism Network Convolution is a type of graph neural network that aims to maximize the representational power of a GNN. The intuition behind GINConv is to learn injective functions that map different graph structures to different representations. GINConv achieves this by using a multi-layer perceptron (MLP) to transform the features of each node and its neighbors, and then aggregating the transformed features using a summation operation. This process allows GINConv to capture the structural information of the graph and learn discriminative node representations that are useful for tasks such as graph classification and graph clustering.</p>
 </section>
 </section>
 <section id="pooling-techniques" class="level2">
 <h2 class="anchored" data-anchor-id="pooling-techniques">Pooling Techniques</h2>
-<p>In this section, we will explain four different pooling techniques used in our model.</p>
+<p>In this section, we will explain different pooling techniques used in our model.</p>
 <section id="top-k-pooling-operator-topkpool" class="level3">
 <h3 class="anchored" data-anchor-id="top-k-pooling-operator-topkpool">Top-K Pooling Operator (TopKPool)</h3>
 <div class="quarto-figure quarto-figure-center">
