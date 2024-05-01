@@ -54,11 +54,11 @@ One need to place the basic config templates inside the folder for each differen
 # Docker
 
 ```
-docker build . -t gnn  
+docker build . -t gerardtho/gnn  
 ```
 
 ```
-docker run -p 5000:5000 -it gnn 
+docker run -p 5000:80 -it gerardtho/gnn 
 ```
 
 # Project organization

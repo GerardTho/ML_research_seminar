@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: titanic-deployment
+  name: gnn-deployment
   labels:
-    app: titanic
+    app: gnn
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: titanic
+      app: gnn
   template:
     metadata:
       labels:
-        app: titanic
+        app: gnn
     spec:
       containers:
-      - name: titanic
-        image: gnn:latest
+      - name: gnn
+        image: gerardtho/gnn:latest
         ports:
-        - containerPort: 80
+        - containerPort: 5000
