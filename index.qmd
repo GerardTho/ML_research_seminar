@@ -11,9 +11,9 @@ We are excited to share our machine learning project with you! In this project, 
 We have included detailed explanations of our model and the techniques we used. To learn more, navigate to the "Framework" page.
 
 
-## Reproducing Our Results
+## Check our results
 
-We believe in transparency and reproducibility. That's why we have created an interface that allows you to input your own data and see the predictions made by our model. To use the interface, simply navigate the "Empirical results" page and follow the instructions.
+We believe in transparency and reproducibility. That's why we have created an API which allows third-parties to see the predictions made by our model.
 
 
 Thank you for visiting our site, and we hope you find our project interesting and useful!

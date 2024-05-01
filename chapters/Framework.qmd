@@ -4,7 +4,7 @@ title: "Framework"
 
 # Framework
 
-In this section, we will explain how our model works. We will cover the generic architecture of a graph neural network (GNN), provide definitions for some key concepts, and explain four different pooling techniques.
+In this section, we will explain how our model works. We will cover the generic architecture of a graph neural network (GNN), as well as provide more in-depth explanations about different convolution and pooling techniques.
 
 ## Generic Architecture of a GNN
 
@@ -14,25 +14,37 @@ A GNN is a neural network architecture designed to operate on graph-structured d
 
 The first layer is the input layer, which takes in the graph data and node features. The second layer is the convolution layer, which applies a convolution operation to capture local dependencies between neighboring nodes in the graph. The third layer is the local pooling layer, which reduces the dimensionality of the node representations by pooling them together within local neighborhoods. The fourth layer is the global pooling (readout) layer, which transforms the entire graph into a single vector representation. The final layer is the MLP classification layer, which produces the desired output based on the graph representation.
 
-## Key Definitions
+## Convolution techniques
 
-In this section, we will provide definitions for some key concepts used in our model.
+In this section, we will provide definitions for the main convolution techniques we consider.
 
-### Definition 1
+### Graph Convolutional Network (GCNconv)
 
-$$\text{Definition 1}$$
+$$h_i' = \sigma \left( \sum_{j \in \mathcal{N}_i} \frac{1}{\sqrt{|\mathcal{N}_i| |\mathcal{N}_j|}} W h_j \right)$$
+* W: parameters of the layer.
+* $h_i$: features at node $i$.
+* $\mathcal{N}_i$: neighborhood of node $i$.
 
-### Definition 2
+Graph Convolutional Network is a type of graph neural network that applies a convolutional filter on the graph nodes, similar to CNNs. The intuition behind GCNconv is that it updates the features of each node by aggregating the features of its neighboring nodes, and then applying a linear transformation to the aggregated features. This process allows the GCNconv to capture the local structural information of the graph and learn node representations that are informative for downstream tasks such as node classification and link prediction.
 
-$$\text{Definition 2}$$
+### Graph Attention Networks (GAT)
 
-### Definition 3
+$h'_i = \sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij} \mathbf{W}h_j\right)$
+$\alpha_{ij}$ : attention coefficient indicating the importance of node $j$'s features to node $i$
+$$\alpha_{ij} = \frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_j]\right)\right)}{\sum_{k \in \mathcal{N}_i} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_k]\right)\right)}$$
 
-$$\text{Definition 3}$$
+Graph Attention Networks (GAT) is a type of graph neural network that uses attention mechanisms to aggregate features from neighboring nodes. The intuition behind GAT is that different neighboring nodes may have different levels of importance when aggregating features for a given node. By using attention coefficients, GAT can learn to weight the contributions of each neighboring node based on their relevance to the target node. This allows GAT to capture complex dependencies between nodes and learn more expressive node representations than other graph neural networks.
+
+### Graph Isomorphism Network Convolution (GINConv)
+
+$$\mathbf{h}^{\prime}_i = \text{MLP} \left( (1 + \epsilon) \cdot\mathbf{h}_i + \sum_{j \in \mathcal{N}_i} \mathbf{h}_j \right)$$
+$\epsilon$ : learnable parameter or a fixed scalar.
+
+Graph Isomorphism Network Convolution is a type of graph neural network that aims to maximize the representational power of a GNN. The intuition behind GINConv is to learn injective functions that map different graph structures to different representations. GINConv achieves this by using a multi-layer perceptron (MLP) to transform the features of each node and its neighbors, and then aggregating the transformed features using a summation operation. This process allows GINConv to capture the structural information of the graph and learn discriminative node representations that are useful for tasks such as graph classification and graph clustering.
 
 ## Pooling Techniques
 
-In this section, we will explain four different pooling techniques used in our model.
+In this section, we will explain different pooling techniques used in our model.
 
 ### Top-K Pooling Operator (TopKPool)
 
