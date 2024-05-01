@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gnn-deployment
+  labels:
+    app: gnn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gnn
+  template:
+    metadata:
+      labels:
+        app: gnn
+    spec:
+      containers:
+      - name: gnn
+        image: gerardtho/gnn:latest
+        ports:
+        - containerPort: 5000
