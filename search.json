@@ -95,7 +95,7 @@
     "href": "chapters/Introduction.html",
     "title": "Introduction",
     "section": "",
-    "text": "In this section, we will introduce the concept of graph neural networks and the notion of homophily. These concepts are important for understanding our machine learning model and the techniques we used to develop it."
+    "text": "In this section we will introduce the concept of graph neural networks and the notion of homophily. These concepts are important for understanding our machine learning model and the techniques we used to develop it."
   },
   {
     "objectID": "chapters/Introduction.html#graph-neural-networks",
