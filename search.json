@@ -77,6 +77,13 @@
     "text": "In this section, we will explain four different pooling techniques used in our model.\n\n\n\n\n\nTop-K Pooling Operator (TopKPool)\n\n\nThe Top-K Pooling operator retains only the top-K nodes with the highest scores, as determined by a scoring function. The scoring function can be based on various factors, such as node degree or feature importance. By retaining only the top-K nodes, Top-K Pooling reduces the dimensionality of the node representations while preserving the most important information.\n\n\n\n\n\n\nSelf-Attention Graph Pooling (SAGPool)\n\n\nSelf-Attention Graph Pooling (SAGPool) is a pooling technique that uses self-attention mechanisms to assign scores to nodes. The scores are used to select the top-K nodes for pooling, similar to Top-K Pooling. However, unlike Top-K Pooling, SAGPool takes into account the relationships between nodes when assigning scores. This allows SAGPool to capture more complex dependencies between nodes.\n\n\n\n\n\n\nMEWIS Pool (Maximum Entropy Weighted Independent Set Pooling)\n\n\nMEWIS Pool is a pooling technique that maximizes the Shannon Entropy of the selected nodes. The Shannon Entropy is a measure of the uncertainty or randomness of a set of nodes. By selecting nodes that maximize the Shannon Entropy, MEWIS Pool aims to capture a diverse set of nodes that cover different regions of the graph.\n\n\n\n\n\n\nEDGE Pooling\n\n\nEDGE Pooling is a pooling technique that pairs nodes based on scores. The scores can be based on various factors, such as node degree or feature importance. EDGE Pooling then merges the paired nodes into a single node, reducing the dimensionality of the node representations. EDGE Pooling can be seen as a form of hierarchical clustering, where nodes are merged based on their similarity.\nEach of these pooling techniques has its own strengths and weaknesses, and the choice of pooling technique depends on the specific characteristics of the graph data and the desired outcome."
   },
   {
+    "objectID": "chapters/Empirical results.html",
+    "href": "chapters/Empirical results.html",
+    "title": "Graph Neural Networks",
+    "section": "",
+    "text": "Generic architecture of a GNN"
+  },
+  {
     "objectID": "chapters/Introduction.html",
     "href": "chapters/Introduction.html",
     "title": "Introduction",
