@@ -114,21 +114,21 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Graph Neural Networks",
+    "title": "Benchmark: Interactions between Convolution and Pooling layers in Graph Neural Networks",
     "section": "",
     "text": "We are excited to share our machine learning project with you! In this project, we have developed a model using graph neural networks. Our goal is to make this model accessible to everyone, regardless of their technical background.\n\n\nWe have included detailed explanations of our model and the techniques we used. To learn more, navigate to the “Framework” page.\n\n\n\nWe believe in transparency and reproducibility. That’s why we have created an interface that allows you to input your own data and see the predictions made by our model. To use the interface, simply navigate the “Empirical results” page and follow the instructions.\nThank you for visiting our site, and we hope you find our project interesting and useful!"
   },
   {
     "objectID": "index.html#understand-our-model",
     "href": "index.html#understand-our-model",
-    "title": "Graph Neural Networks",
+    "title": "Benchmark: Interactions between Convolution and Pooling layers in Graph Neural Networks",
     "section": "",
     "text": "We have included detailed explanations of our model and the techniques we used. To learn more, navigate to the “Framework” page."
   },
   {
     "objectID": "index.html#reproducing-our-results",
     "href": "index.html#reproducing-our-results",
-    "title": "Graph Neural Networks",
+    "title": "Benchmark: Interactions between Convolution and Pooling layers in Graph Neural Networks",
     "section": "",
     "text": "We believe in transparency and reproducibility. That’s why we have created an interface that allows you to input your own data and see the predictions made by our model. To use the interface, simply navigate the “Empirical results” page and follow the instructions.\nThank you for visiting our site, and we hope you find our project interesting and useful!"
   }
