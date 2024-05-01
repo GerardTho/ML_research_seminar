@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Graph Neural Networks - Define Models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Graph Neural Networks</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../chapters/Introduction.html"> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../chapters/Framework.html"> 
+<span class="menu-text">Framework</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../chapters/Empirical results.html"> 
+<span class="menu-text">Empirical results</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../chapters/Conclusion.html"> 
+<span class="menu-text">Conclusion</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#apply-on-mutag" id="toc-apply-on-mutag" class="nav-link active" data-scroll-target="#apply-on-mutag">Apply on MUTAG</a>
+  <ul class="collapse">
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
+  <li><a href="#load-model-architectures" id="toc-load-model-architectures" class="nav-link" data-scroll-target="#load-model-architectures">Load model architectures</a></li>
+  <li><a href="#train-models" id="toc-train-models" class="nav-link" data-scroll-target="#train-models">Train models</a></li>
+  <li><a href="#plot-metrics" id="toc-plot-metrics" class="nav-link" data-scroll-target="#plot-metrics">Plot metrics</a></li>
+  <li><a href="#fold-validation" id="toc-fold-validation" class="nav-link" data-scroll-target="#fold-validation">10-fold validation</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Define Models</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="a1b18e78-a8aa-48b2-9eb7-f616c588a277" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>capture capt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install matplotlib</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="c7555908-bc32-4b71-a8b6-628ab19c6cc4" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch_geometric.nn <span class="im">import</span> GINConv, global_mean_pool</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch_geometric.utils <span class="im">import</span> get_laplacian</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>sys.path.append(<span class="st">'../model'</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mewisPool_layer <span class="im">import</span> MLP, MEWISPool</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="b13a8ca7-6706-4c24-a0d8-17121af7bceb" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>torch.use_deterministic_algorithms(<span class="va">True</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>torch.backends.cudnn.deterministic <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="45bb3a4b-72ec-46a1-a4f9-d9b92cb388a2" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Net(nn.Module):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, input_dim, hidden_dim, num_classes, device):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(Net, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gc1 <span class="op">=</span> GINConv(MLP(input_dim<span class="op">=</span>input_dim, hidden_dim<span class="op">=</span>hidden_dim, output_dim<span class="op">=</span>hidden_dim, enhance<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pool1 <span class="op">=</span> MEWISPool(hidden_dim<span class="op">=</span>hidden_dim, device<span class="op">=</span>device)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gc2 <span class="op">=</span> GINConv(MLP(input_dim<span class="op">=</span>hidden_dim, hidden_dim<span class="op">=</span>hidden_dim, output_dim<span class="op">=</span>hidden_dim, enhance<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pool2 <span class="op">=</span> MEWISPool(hidden_dim<span class="op">=</span>hidden_dim, device<span class="op">=</span>device)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gc3 <span class="op">=</span> GINConv(MLP(input_dim<span class="op">=</span>hidden_dim, hidden_dim<span class="op">=</span>hidden_dim, output_dim<span class="op">=</span>hidden_dim, enhance<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc1 <span class="op">=</span> nn.Linear(in_features<span class="op">=</span>hidden_dim, out_features<span class="op">=</span>hidden_dim)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc2 <span class="op">=</span> nn.Linear(in_features<span class="op">=</span>hidden_dim, out_features<span class="op">=</span>num_classes)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x, edge_index, batch):</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> F.relu(<span class="va">self</span>.gc1(x, edge_index))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        x_pooled, edge_index_pooled, batch_pooled, loss1 <span class="op">=</span> <span class="va">self</span>.pool1(x, edge_index, batch)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        x_pooled <span class="op">=</span> F.relu(<span class="va">self</span>.gc2(x_pooled, edge_index_pooled))</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        x_pooled, edge_index_pooled, batch_pooled, loss2 <span class="op">=</span> <span class="va">self</span>.pool2(x_pooled, edge_index_pooled,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>                                                                                batch_pooled)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        x_pooled <span class="op">=</span> <span class="va">self</span>.gc3(x_pooled, edge_index_pooled)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># readout = global_mean_pool(x_pooled, batch_pooled)</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        readout <span class="op">=</span> torch.cat([x_pooled[batch_pooled <span class="op">==</span> i].mean(<span class="dv">0</span>).unsqueeze(<span class="dv">0</span>) <span class="cf">for</span> i <span class="kw">in</span> torch.unique(batch_pooled)],</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                    dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.fc1(readout)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> torch.relu(out)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.fc2(out)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out, loss1 <span class="op">+</span> loss2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="19d5d9c6-c3bc-40ae-b3c5-85a7116099b3" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Net_complex(nn.Module):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, input_dim, hidden_dim, num_classes, device):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(Net_complex, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gc1 <span class="op">=</span> GINConv(MLP(input_dim<span class="op">=</span>input_dim, hidden_dim<span class="op">=</span>hidden_dim, output_dim<span class="op">=</span>hidden_dim, enhance<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gc2 <span class="op">=</span> GINConv(MLP(input_dim<span class="op">=</span>hidden_dim, hidden_dim<span class="op">=</span>hidden_dim, output_dim<span class="op">=</span>hidden_dim, enhance<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pool1 <span class="op">=</span> MEWISPool(hidden_dim<span class="op">=</span>hidden_dim, device<span class="op">=</span>device)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gc3 <span class="op">=</span> GINConv(MLP(input_dim<span class="op">=</span>hidden_dim, hidden_dim<span class="op">=</span>hidden_dim, output_dim<span class="op">=</span>hidden_dim, enhance<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gc4 <span class="op">=</span> GINConv(MLP(input_dim<span class="op">=</span>hidden_dim, hidden_dim<span class="op">=</span>hidden_dim, output_dim<span class="op">=</span>hidden_dim, enhance<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pool2 <span class="op">=</span> MEWISPool(hidden_dim<span class="op">=</span>hidden_dim, device<span class="op">=</span>device)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gc5 <span class="op">=</span> GINConv(MLP(input_dim<span class="op">=</span>hidden_dim, hidden_dim<span class="op">=</span>hidden_dim, output_dim<span class="op">=</span>hidden_dim, enhance<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc1 <span class="op">=</span> nn.Linear(in_features<span class="op">=</span>hidden_dim, out_features<span class="op">=</span>hidden_dim)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc2 <span class="op">=</span> nn.Linear(in_features<span class="op">=</span>hidden_dim, out_features<span class="op">=</span>num_classes)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x, edge_index, batch):</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.gc1(x, edge_index)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> torch.relu(x)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.gc2(x, edge_index)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> torch.relu(x)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        x_pooled1, edge_index_pooled1, batch_pooled1, loss1 <span class="op">=</span> <span class="va">self</span>.pool1(x, edge_index, batch)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        x_pooled1 <span class="op">=</span> <span class="va">self</span>.gc3(x_pooled1, edge_index_pooled1)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        x_pooled1 <span class="op">=</span> torch.relu(x_pooled1)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        x_pooled1 <span class="op">=</span> <span class="va">self</span>.gc4(x_pooled1, edge_index_pooled1)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        x_pooled1 <span class="op">=</span> torch.relu(x_pooled1)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        x_pooled2, edge_index_pooled2, batch_pooled2, loss2 <span class="op">=</span> <span class="va">self</span>.pool2(x_pooled1, edge_index_pooled1,</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>                                                                                 batch_pooled1)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        x_pooled2 <span class="op">=</span> <span class="va">self</span>.gc5(x_pooled2, edge_index_pooled2)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>        x_pooled2 <span class="op">=</span> torch.relu(x_pooled2)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        readout <span class="op">=</span> torch.cat([x_pooled2[batch_pooled2 <span class="op">==</span> i].mean(<span class="dv">0</span>).unsqueeze(<span class="dv">0</span>) <span class="cf">for</span> i <span class="kw">in</span> torch.unique(batch_pooled2)],</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>                            dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.fc1(readout)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> torch.relu(out)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.fc2(out)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out, loss1 <span class="op">+</span> loss2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="apply-on-mutag" class="level1">
+<h1>Apply on MUTAG</h1>
+<section id="load-data" class="level3">
+<h3 class="anchored" data-anchor-id="load-data">Load data</h3>
+<div id="83cad8aa-ac42-48fc-9312-c0e3a8087ed5" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch_geometric.datasets <span class="im">import</span> TUDataset</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch_geometric.loader <span class="im">import</span> DataLoader</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="340626a7-90e9-4b1e-ad6c-f64491c5e76b" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">'data'</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> TUDataset(path, name<span class="op">=</span><span class="st">'MUTAG'</span>, use_node_attr<span class="op">=</span><span class="va">True</span>, use_edge_attr<span class="op">=</span><span class="va">True</span>).shuffle()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>input_dim <span class="op">=</span> dataset.num_features</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>num_classes <span class="op">=</span> dataset.num_classes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Downloading https://www.chrsmrrs.com/graphkerneldatasets/MUTAG.zip
+Processing...
+Done!</code></pre>
+</div>
+</div>
+<div id="ecd9eea8-7d86-422a-ae93-aa58441b9578" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_dataloaders(BATCH_SIZE<span class="op">=</span><span class="dv">20</span>, VAL_PCT<span class="op">=</span><span class="fl">0.1</span>, TEST_PCT<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    BATCH_SIZE <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    VAL_PCT <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    TEST_PCT <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    n_train <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(dataset) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> VAL_PCT <span class="op">-</span> TEST_PCT))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    n_val <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(dataset) <span class="op">*</span> VAL_PCT)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    train_dataset <span class="op">=</span> dataset[:n_train]</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    val_dataset <span class="op">=</span> dataset[n_train: n_train<span class="op">+</span>n_val]</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    test_dataset <span class="op">=</span> dataset[n_train<span class="op">+</span>n_val:]</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    test_loader <span class="op">=</span> DataLoader(test_dataset, batch_size<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    val_loader <span class="op">=</span> DataLoader(val_dataset, batch_size<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    train_loader <span class="op">=</span> DataLoader(train_dataset, batch_size<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_loader, val_loader, test_loader</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="274a3269-b72a-47e4-8c01-32f1db46051f" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>BATCH_SIZE <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>VAL_PCT <span class="op">=</span> <span class="fl">0.15</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>TEST_PCT <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>train_loader, val_loader, test_loader <span class="op">=</span> get_dataloaders(BATCH_SIZE<span class="op">=</span>BATCH_SIZE, VAL_PCT<span class="op">=</span>VAL_PCT, TEST_PCT<span class="op">=</span>TEST_PCT)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'</span><span class="sc">{</span><span class="bu">len</span>(train_loader.dataset)<span class="sc">}</span><span class="ss"> training samples, </span><span class="sc">{</span><span class="bu">len</span>(val_loader.dataset)<span class="sc">}</span><span class="ss"> validation samples, '</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f'</span><span class="sc">{</span><span class="bu">len</span>(test_loader.dataset)<span class="sc">}</span><span class="ss"> test samples.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150 training samples, 18 validation samples, 20 test samples.</code></pre>
+</div>
+</div>
+<div id="9f57aa04-729d-4386-931e-72f574a0ba8e" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">'cpu'</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Using device: </span><span class="sc">{</span>device<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Using device: cpu</code></pre>
+</div>
+</div>
+</section>
+<section id="load-model-architectures" class="level3">
+<h3 class="anchored" data-anchor-id="load-model-architectures">Load model architectures</h3>
+<div id="14b3d3d9-78c2-4deb-badc-dbc0676e360b" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>hidden_dim <span class="op">=</span> <span class="dv">32</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>nb_epochs <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>learning_rate <span class="op">=</span> <span class="fl">1e-4</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>weight_decay <span class="op">=</span> <span class="fl">1e-5</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>scheduler_patience <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>scheduler_factor <span class="op">=</span> <span class="fl">1e-1</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>patience <span class="op">=</span> <span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="eac19ca3-5212-4669-9d91-6ce138cd8ec9" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_model(model_architecture, input_dim<span class="op">=</span>input_dim, hidden_dim<span class="op">=</span>hidden_dim, num_classes<span class="op">=</span>num_classes, device<span class="op">=</span>device, </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>        learning_rate<span class="op">=</span>learning_rate, weight_decay<span class="op">=</span>weight_decay, scheduler_patience<span class="op">=</span>scheduler_patience, scheduler_factor<span class="op">=</span>scheduler_factor, verbose_scheduler<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> model_architecture(input_dim<span class="op">=</span>input_dim, </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                hidden_dim<span class="op">=</span>hidden_dim, num_classes<span class="op">=</span>num_classes, device<span class="op">=</span>device).to(device)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    optimizer <span class="op">=</span> torch.optim.Adam(model.parameters(), lr<span class="op">=</span>learning_rate, weight_decay<span class="op">=</span>weight_decay)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    scheduler <span class="op">=</span> torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer<span class="op">=</span>optimizer,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                                                           patience<span class="op">=</span>scheduler_patience,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                                                           factor<span class="op">=</span>scheduler_factor,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                                                           verbose<span class="op">=</span>verbose_scheduler)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    criterion <span class="op">=</span> torch.nn.CrossEntropyLoss()</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> model, optimizer, scheduler, criterion</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="train-models" class="level3">
+<h3 class="anchored" data-anchor-id="train-models">Train models</h3>
+<div id="2048be84-4033-43dd-89fe-ecff31e930ff" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> validate(model, val_loader, criterion, device):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    val_loss <span class="op">=</span> <span class="fl">0.</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    val_corrects <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, data <span class="kw">in</span> <span class="bu">enumerate</span>(val_loader):</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>            data <span class="op">=</span> data.to(device)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>            out, loss_pool <span class="op">=</span> model(data.x, data.edge_index, data.batch)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>            loss_classification <span class="op">=</span> criterion(out, data.y)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> loss_classification <span class="op">+</span> <span class="fl">0.01</span> <span class="op">*</span> loss_pool</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>            val_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>            val_corrects <span class="op">+=</span> (F.softmax(out, dim<span class="op">=</span><span class="dv">1</span>).argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> data.y).<span class="bu">sum</span>().item()</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    val_loss <span class="op">/=</span> <span class="bu">len</span>(val_loader)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    val_acc <span class="op">=</span> val_corrects <span class="op">/</span> <span class="bu">len</span>(val_loader.dataset)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> val_loss, val_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="1f2e54fd-def3-4f60-9b29-a714caed487f" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_epoch(model, train_loader, criterion, optimizer, scheduler, device):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    train_loss <span class="op">=</span> <span class="fl">0.</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    train_corrects <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    model.train()</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, data <span class="kw">in</span> <span class="bu">enumerate</span>(train_loader):</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> data.to(device)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        out, loss_pool <span class="op">=</span> model(data.x, data.edge_index, data.batch)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        loss_classification <span class="op">=</span> criterion(out, data.y)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_classification <span class="op">+</span> <span class="fl">0.01</span> <span class="op">*</span> loss_pool</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        train_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        train_corrects <span class="op">+=</span> (F.softmax(out, dim<span class="op">=</span><span class="dv">1</span>).argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> data.y).<span class="bu">sum</span>().item()</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    train_loss <span class="op">/=</span> <span class="bu">len</span>(train_loader)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    train_acc <span class="op">=</span> train_corrects <span class="op">/</span> <span class="bu">len</span>(train_loader.dataset)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    scheduler.step(train_loss)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_loss, train_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="e27621e5-67ad-4da3-be24-d4a4fc459286" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(model, criterion, optimizer, scheduler, train_loader, val_loader, test_loader, nb_epochs, patience, device,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>         print_every<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    best_val_loss <span class="op">=</span> <span class="bu">float</span>(<span class="st">'inf'</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    best_test_acc <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    counter <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    train_losses,  val_losses, test_losses <span class="op">=</span> [], [], []</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    train_accs, val_accs, test_accs <span class="op">=</span> [], [], []</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> print_every <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        print_every <span class="op">=</span> <span class="dv">1</span> <span class="cf">if</span> nb_epochs <span class="op">&lt;=</span> <span class="dv">20</span> <span class="cf">else</span> <span class="bu">int</span>(nb_epochs<span class="op">/</span><span class="dv">20</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(nb_epochs):</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        train_loss, train_acc <span class="op">=</span> train_epoch(model, train_loader, criterion, optimizer, scheduler, device)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        val_loss, val_acc <span class="op">=</span> validate(model, val_loader, criterion, device)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        test_loss, test_acc <span class="op">=</span> validate(model, test_loader, criterion, device)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        train_losses.append(train_loss)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>        val_losses.append(val_loss)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>        test_losses.append(test_loss)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>        train_accs.append(train_acc)</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>        val_accs.append(val_acc)</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>        test_accs.append(test_acc)</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> epoch <span class="op">%</span> print_every <span class="op">==</span> <span class="dv">0</span> <span class="kw">or</span> epoch <span class="op">==</span> nb_epochs <span class="op">-</span> <span class="dv">1</span>:</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"Epoch [</span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>nb_epochs<span class="sc">}</span><span class="ss">], Train loss: </span><span class="sc">{</span>train_loss<span class="sc">:.3f}</span><span class="ss">, Val loss: </span><span class="sc">{</span>val_loss<span class="sc">:.3f}</span><span class="ss">, Test loss: </span><span class="sc">{</span>test_loss<span class="sc">:.3f}</span><span class="ss">,"</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>                  <span class="ss">f" Train acc: </span><span class="sc">{</span>train_acc<span class="sc">:.2f}</span><span class="ss">, Val acc: </span><span class="sc">{</span>val_acc<span class="sc">:.2f}</span><span class="ss">, Test acc: </span><span class="sc">{</span>test_acc<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Early-Stopping</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> val_loss <span class="op">&lt;</span> best_val_loss:</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>            best_val_loss <span class="op">=</span> val_loss</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>            best_test_acc <span class="op">=</span> test_acc</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Early stopping</span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> counter <span class="op">&gt;</span> patience:</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f'======== Early stopping at Epoch </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss"> ========'</span>)</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> epoch <span class="op">%</span> print_every <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>                    <span class="bu">print</span>(<span class="ss">f"Epoch [</span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>nb_epochs<span class="sc">}</span><span class="ss">], Train loss: </span><span class="sc">{</span>train_loss<span class="sc">:.3f}</span><span class="ss">, Val loss: </span><span class="sc">{</span>val_loss<span class="sc">:.3f}</span><span class="ss">, Test loss: </span><span class="sc">{</span>test_loss<span class="sc">:.3f}</span><span class="ss">,"</span></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>                          <span class="ss">f" Train acc: </span><span class="sc">{</span>train_acc<span class="sc">:.2f}</span><span class="ss">, Val acc: </span><span class="sc">{</span>val_acc<span class="sc">:.2f}</span><span class="ss">, Test acc: </span><span class="sc">{</span>test_acc<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, best_test_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="0a00e975-2d14-42df-a084-5fcd6f41de21" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model, optimizer, scheduler, criterion <span class="op">=</span> create_model(Net)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>model_5, optimizer_5, scheduler_5, criterion_5 <span class="op">=</span> create_model(Net_complex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>c:\Users\wande\anaconda3\envs\gnn\Lib\site-packages\torch\optim\lr_scheduler.py:28: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn("The verbose parameter is deprecated. Please use get_last_lr() "</code></pre>
+</div>
+</div>
+<div id="a2d91f30-5e85-49c0-89fe-e86d757ff04d" class="cell" data-scrolled="true" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, _ <span class="op">=</span> train(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    model, criterion, optimizer, scheduler, train_loader, val_loader, test_loader, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    nb_epochs, patience, device, print_every<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch [0/200], Train loss: 4.080, Val loss: 3.995, Test loss: 4.183, Train acc: 0.68, Val acc: 0.56, Test acc: 0.65
+Epoch [1/200], Train loss: 4.002, Val loss: 3.904, Test loss: 4.110, Train acc: 0.61, Val acc: 0.56, Test acc: 0.65
+Epoch [2/200], Train loss: 3.873, Val loss: 3.818, Test loss: 3.998, Train acc: 0.61, Val acc: 0.56, Test acc: 0.65</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>KeyboardInterrupt: </code></pre>
+</div>
+</div>
+<div id="846ca313-051c-42af-b690-a99902b2cbfe" class="cell" data-scrolled="true" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>train_losses_5, val_losses_5, test_losses_5, train_accs_5, val_accs_5, test_accs_5, _ <span class="op">=</span> train(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    model_5, criterion_5, optimizer_5, scheduler_5, train_loader, val_loader, test_loader, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    nb_epochs, patience, device, print_every<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch [0/200], Train loss: 3.583, Val loss: 4.195, Test loss: 4.112, Train acc: 0.60, Val acc: 0.78, Test acc: 0.60
+Epoch [1/200], Train loss: 3.523, Val loss: 4.115, Test loss: 4.071, Train acc: 0.62, Val acc: 0.78, Test acc: 0.60
+Epoch [2/200], Train loss: 3.425, Val loss: 4.060, Test loss: 4.009, Train acc: 0.62, Val acc: 0.78, Test acc: 0.60
+Epoch [3/200], Train loss: 3.358, Val loss: 3.915, Test loss: 3.947, Train acc: 0.63, Val acc: 0.78, Test acc: 0.60
+Epoch [4/200], Train loss: 3.308, Val loss: 3.718, Test loss: 3.786, Train acc: 0.65, Val acc: 0.78, Test acc: 0.60
+Epoch [5/200], Train loss: 3.232, Val loss: 3.583, Test loss: 3.620, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [6/200], Train loss: 3.148, Val loss: 3.412, Test loss: 3.464, Train acc: 0.62, Val acc: 0.78, Test acc: 0.60
+Epoch [7/200], Train loss: 3.075, Val loss: 3.277, Test loss: 3.345, Train acc: 0.65, Val acc: 0.78, Test acc: 0.60
+Epoch [8/200], Train loss: 2.949, Val loss: 3.152, Test loss: 3.214, Train acc: 0.65, Val acc: 0.78, Test acc: 0.60
+Epoch [9/200], Train loss: 2.830, Val loss: 3.002, Test loss: 3.054, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [10/200], Train loss: 2.732, Val loss: 2.825, Test loss: 2.880, Train acc: 0.67, Val acc: 0.78, Test acc: 0.60
+Epoch [11/200], Train loss: 2.582, Val loss: 2.645, Test loss: 2.710, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [12/200], Train loss: 2.415, Val loss: 2.447, Test loss: 2.517, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [13/200], Train loss: 2.228, Val loss: 2.231, Test loss: 2.296, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [14/200], Train loss: 2.042, Val loss: 2.011, Test loss: 2.080, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [15/200], Train loss: 1.816, Val loss: 1.775, Test loss: 1.845, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [16/200], Train loss: 1.651, Val loss: 1.523, Test loss: 1.595, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [17/200], Train loss: 1.448, Val loss: 1.327, Test loss: 1.415, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [18/200], Train loss: 1.287, Val loss: 1.190, Test loss: 1.255, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [19/200], Train loss: 1.183, Val loss: 1.091, Test loss: 1.149, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [20/200], Train loss: 1.053, Val loss: 0.986, Test loss: 1.043, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [21/200], Train loss: 0.978, Val loss: 0.911, Test loss: 0.961, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [22/200], Train loss: 0.936, Val loss: 0.894, Test loss: 0.932, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [23/200], Train loss: 0.896, Val loss: 0.833, Test loss: 0.879, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [24/200], Train loss: 0.885, Val loss: 0.786, Test loss: 0.835, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [25/200], Train loss: 0.830, Val loss: 0.787, Test loss: 0.826, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [26/200], Train loss: 0.840, Val loss: 0.746, Test loss: 0.797, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [27/200], Train loss: 0.816, Val loss: 0.714, Test loss: 0.779, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [28/200], Train loss: 0.809, Val loss: 0.708, Test loss: 0.762, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [29/200], Train loss: 0.775, Val loss: 0.678, Test loss: 0.751, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [30/200], Train loss: 0.765, Val loss: 0.643, Test loss: 0.715, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [31/200], Train loss: 0.788, Val loss: 0.642, Test loss: 0.715, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [32/200], Train loss: 0.776, Val loss: 0.639, Test loss: 0.704, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [33/200], Train loss: 0.764, Val loss: 0.624, Test loss: 0.702, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [34/200], Train loss: 0.782, Val loss: 0.627, Test loss: 0.695, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [35/200], Train loss: 0.769, Val loss: 0.638, Test loss: 0.697, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [36/200], Train loss: 0.747, Val loss: 0.613, Test loss: 0.692, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [37/200], Train loss: 0.741, Val loss: 0.620, Test loss: 0.693, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [38/200], Train loss: 0.751, Val loss: 0.617, Test loss: 0.696, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [39/200], Train loss: 0.740, Val loss: 0.628, Test loss: 0.682, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [40/200], Train loss: 0.746, Val loss: 0.634, Test loss: 0.684, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [41/200], Train loss: 0.762, Val loss: 0.627, Test loss: 0.679, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [42/200], Train loss: 0.733, Val loss: 0.621, Test loss: 0.678, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [43/200], Train loss: 0.719, Val loss: 0.653, Test loss: 0.702, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [44/200], Train loss: 0.737, Val loss: 0.617, Test loss: 0.707, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [45/200], Train loss: 0.714, Val loss: 0.644, Test loss: 0.705, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [46/200], Train loss: 0.706, Val loss: 0.650, Test loss: 0.687, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [47/200], Train loss: 0.701, Val loss: 0.677, Test loss: 0.706, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [48/200], Train loss: 0.725, Val loss: 0.660, Test loss: 0.703, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [49/200], Train loss: 0.688, Val loss: 0.636, Test loss: 0.698, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [50/200], Train loss: 0.714, Val loss: 0.652, Test loss: 0.699, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [51/200], Train loss: 0.679, Val loss: 0.646, Test loss: 0.687, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [52/200], Train loss: 0.711, Val loss: 0.660, Test loss: 0.694, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [53/200], Train loss: 0.698, Val loss: 0.675, Test loss: 0.713, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [54/200], Train loss: 0.699, Val loss: 0.674, Test loss: 0.716, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [55/200], Train loss: 0.679, Val loss: 0.667, Test loss: 0.705, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [56/200], Train loss: 0.693, Val loss: 0.655, Test loss: 0.718, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [57/200], Train loss: 0.689, Val loss: 0.653, Test loss: 0.708, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [58/200], Train loss: 0.672, Val loss: 0.664, Test loss: 0.723, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [59/200], Train loss: 0.698, Val loss: 0.653, Test loss: 0.721, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [60/200], Train loss: 0.687, Val loss: 0.653, Test loss: 0.715, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [61/200], Train loss: 0.686, Val loss: 0.655, Test loss: 0.706, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [62/200], Train loss: 0.653, Val loss: 0.639, Test loss: 0.712, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [63/200], Train loss: 0.673, Val loss: 0.632, Test loss: 0.712, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [64/200], Train loss: 0.664, Val loss: 0.635, Test loss: 0.723, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [65/200], Train loss: 0.659, Val loss: 0.613, Test loss: 0.707, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [66/200], Train loss: 0.667, Val loss: 0.609, Test loss: 0.715, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [67/200], Train loss: 0.695, Val loss: 0.649, Test loss: 0.726, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [68/200], Train loss: 0.660, Val loss: 0.661, Test loss: 0.728, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [69/200], Train loss: 0.670, Val loss: 0.669, Test loss: 0.754, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [70/200], Train loss: 0.660, Val loss: 0.690, Test loss: 0.728, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [71/200], Train loss: 0.647, Val loss: 0.680, Test loss: 0.743, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [72/200], Train loss: 0.667, Val loss: 0.673, Test loss: 0.728, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [73/200], Train loss: 0.644, Val loss: 0.681, Test loss: 0.738, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [74/200], Train loss: 0.667, Val loss: 0.671, Test loss: 0.748, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [75/200], Train loss: 0.673, Val loss: 0.681, Test loss: 0.751, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [76/200], Train loss: 0.662, Val loss: 0.673, Test loss: 0.726, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [77/200], Train loss: 0.627, Val loss: 0.678, Test loss: 0.723, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [78/200], Train loss: 0.617, Val loss: 0.700, Test loss: 0.719, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [79/200], Train loss: 0.658, Val loss: 0.690, Test loss: 0.722, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [80/200], Train loss: 0.644, Val loss: 0.670, Test loss: 0.714, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [81/200], Train loss: 0.628, Val loss: 0.679, Test loss: 0.712, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [82/200], Train loss: 0.635, Val loss: 0.678, Test loss: 0.721, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [83/200], Train loss: 0.612, Val loss: 0.689, Test loss: 0.715, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [84/200], Train loss: 0.627, Val loss: 0.656, Test loss: 0.697, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [85/200], Train loss: 0.617, Val loss: 0.686, Test loss: 0.731, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [86/200], Train loss: 0.655, Val loss: 0.689, Test loss: 0.725, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [87/200], Train loss: 0.652, Val loss: 0.678, Test loss: 0.735, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [88/200], Train loss: 0.660, Val loss: 0.711, Test loss: 0.726, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [89/200], Train loss: 0.657, Val loss: 0.703, Test loss: 0.736, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [90/200], Train loss: 0.629, Val loss: 0.692, Test loss: 0.732, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [91/200], Train loss: 0.609, Val loss: 0.673, Test loss: 0.757, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [92/200], Train loss: 0.652, Val loss: 0.689, Test loss: 0.724, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [93/200], Train loss: 0.616, Val loss: 0.728, Test loss: 0.766, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [94/200], Train loss: 0.640, Val loss: 0.686, Test loss: 0.750, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [95/200], Train loss: 0.611, Val loss: 0.680, Test loss: 0.717, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [96/200], Train loss: 0.626, Val loss: 0.695, Test loss: 0.718, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [97/200], Train loss: 0.606, Val loss: 0.708, Test loss: 0.722, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [98/200], Train loss: 0.592, Val loss: 0.689, Test loss: 0.732, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [99/200], Train loss: 0.622, Val loss: 0.674, Test loss: 0.718, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [100/200], Train loss: 0.631, Val loss: 0.719, Test loss: 0.732, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [101/200], Train loss: 0.607, Val loss: 0.682, Test loss: 0.727, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [102/200], Train loss: 0.617, Val loss: 0.656, Test loss: 0.697, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [103/200], Train loss: 0.582, Val loss: 0.657, Test loss: 0.730, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [104/200], Train loss: 0.596, Val loss: 0.663, Test loss: 0.733, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [105/200], Train loss: 0.616, Val loss: 0.686, Test loss: 0.730, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [106/200], Train loss: 0.602, Val loss: 0.681, Test loss: 0.694, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [107/200], Train loss: 0.593, Val loss: 0.660, Test loss: 0.704, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [108/200], Train loss: 0.622, Val loss: 0.690, Test loss: 0.685, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [109/200], Train loss: 0.591, Val loss: 0.669, Test loss: 0.727, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [110/200], Train loss: 0.569, Val loss: 0.694, Test loss: 0.723, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [111/200], Train loss: 0.578, Val loss: 0.711, Test loss: 0.781, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [112/200], Train loss: 0.577, Val loss: 0.697, Test loss: 0.732, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [113/200], Train loss: 0.561, Val loss: 0.695, Test loss: 0.706, Train acc: 0.67, Val acc: 0.78, Test acc: 0.60
+Epoch [114/200], Train loss: 0.596, Val loss: 0.648, Test loss: 0.703, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [115/200], Train loss: 0.570, Val loss: 0.630, Test loss: 0.688, Train acc: 0.66, Val acc: 0.78, Test acc: 0.60
+Epoch [116/200], Train loss: 0.573, Val loss: 0.659, Test loss: 0.686, Train acc: 0.65, Val acc: 0.78, Test acc: 0.60
+Epoch [117/200], Train loss: 0.568, Val loss: 0.663, Test loss: 0.697, Train acc: 0.67, Val acc: 0.78, Test acc: 0.60
+======== Early stopping at Epoch 117 ========</code></pre>
+</div>
+</div>
+</section>
+<section id="plot-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="plot-metrics">Plot metrics</h3>
+<div id="ad63c5dd-8d44-4362-9a68-18a4b942f10e" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_metrics(train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, suptitle<span class="op">=</span><span class="st">''</span>): </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">0</span>].plot(train_losses, label<span class="op">=</span><span class="st">'Train Loss'</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">0</span>].plot(val_losses, label<span class="op">=</span><span class="st">'Val Loss'</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">0</span>].plot(test_losses, label<span class="op">=</span><span class="st">'Test Loss'</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">0</span>].set_title(<span class="st">'Loss'</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">0</span>].legend()</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">0</span>].grid(<span class="st">'on'</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot accuracies</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">1</span>].plot(train_accs, label<span class="op">=</span><span class="st">'Train Acc'</span>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">1</span>].plot(val_accs, label<span class="op">=</span><span class="st">'Val Acc'</span>)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">1</span>].plot(test_accs, label<span class="op">=</span><span class="st">'Test Acc'</span>)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">1</span>].set_title(<span class="st">'Accuracy'</span>)</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">1</span>].legend()</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">1</span>].grid(<span class="st">'on'</span>)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    plt.suptitle(suptitle)</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="dbb826a6-c607-4350-8725-2bdf5f4dd50f" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plot_metrics(train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, suptitle<span class="op">=</span><span class="st">'Model 1'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gnn_mewispool_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="64243b05-fa30-4838-9899-dd57049ca7ad" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>plot_metrics(train_losses_5, val_losses_5, test_losses_5, train_accs_5, val_accs_5, test_accs_5, suptitle<span class="op">=</span><span class="st">'Model - 5 GinConv layers'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gnn_mewispool_files/figure-html/cell-22-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="fold-validation" class="level3">
+<h3 class="anchored" data-anchor-id="fold-validation">10-fold validation</h3>
+<div id="05d74b36-7a4c-4c4a-b2ad-e375e45768a3" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> k_fold_loader(dataset, fold, k<span class="op">=</span><span class="dv">10</span>, batch_size<span class="op">=</span>BATCH_SIZE):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(dataset)<span class="op">//</span><span class="dv">10</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    start <span class="op">=</span> n<span class="op">*</span>fold</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    end <span class="op">=</span> <span class="bu">len</span>(dataset) <span class="cf">if</span> fold <span class="op">==</span> k <span class="cf">else</span> (fold<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>n </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    indices <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(dataset)))</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    indices_test <span class="op">=</span> indices[start:end]</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    indices_val_train <span class="op">=</span> indices[:start] <span class="op">+</span> indices[end:]</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    indices_val <span class="op">=</span> np.random.choice(indices_val_train, size<span class="op">=</span><span class="bu">len</span>(indices_val_train)<span class="op">//</span><span class="dv">10</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    indices_train <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> indices_val_train <span class="cf">if</span> x <span class="kw">not</span> <span class="kw">in</span> indices_val]</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    train_dataset <span class="op">=</span> dataset[indices_train]</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    val_dataset <span class="op">=</span> dataset[indices_val]</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    test_dataset <span class="op">=</span> dataset[indices_test]</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    test_loader <span class="op">=</span> DataLoader(test_dataset, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    val_loader <span class="op">=</span> DataLoader(val_dataset, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    train_loader <span class="op">=</span> DataLoader(train_dataset, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_loader, val_loader, test_loader</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="aacbeba9-1437-4ab7-a51e-e01b0f524835" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>BATCH_SIZE <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>VAL_PCT <span class="op">=</span> <span class="fl">0.15</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>TEST_PCT <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>hidden_dim <span class="op">=</span> <span class="dv">32</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>nb_epochs <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>learning_rate <span class="op">=</span> <span class="fl">1e-3</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>weight_decay <span class="op">=</span> <span class="fl">1e-5</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>scheduler_patience <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>scheduler_factor <span class="op">=</span> <span class="fl">1e-1</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>patience <span class="op">=</span> <span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="d5f60dda-2139-4106-9236-e419e84dc7a6" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_all(model_architecture, fold, batch_size<span class="op">=</span>BATCH_SIZE, val_pct<span class="op">=</span>VAL_PCT, test_pct<span class="op">=</span>TEST_PCT, input_dim<span class="op">=</span>input_dim, hidden_dim<span class="op">=</span>hidden_dim, num_classes<span class="op">=</span>num_classes, device<span class="op">=</span>device, </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                                learning_rate<span class="op">=</span>learning_rate, weight_decay<span class="op">=</span>weight_decay, scheduler_patience<span class="op">=</span>scheduler_patience, scheduler_factor<span class="op">=</span>scheduler_factor,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                                nb_epochs<span class="op">=</span>nb_epochs, patience<span class="op">=</span>patience):</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    train_loader, val_loader, test_loader <span class="op">=</span> k_fold_loader(dataset, fold, k<span class="op">=</span><span class="dv">10</span>, batch_size<span class="op">=</span>BATCH_SIZE)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    model, optimizer, scheduler, criterion <span class="op">=</span> create_model(model_architecture, input_dim<span class="op">=</span>input_dim, hidden_dim<span class="op">=</span>hidden_dim, num_classes<span class="op">=</span>num_classes, device<span class="op">=</span>device, </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                                learning_rate<span class="op">=</span>learning_rate, weight_decay<span class="op">=</span>weight_decay, scheduler_patience<span class="op">=</span>scheduler_patience, scheduler_factor<span class="op">=</span>scheduler_factor, verbose_scheduler<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, best_test_acc <span class="op">=</span> train(model, criterion, optimizer, scheduler, train_loader, val_loader, test_loader, </span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                        nb_epochs, patience, device, print_every<span class="op">=</span>nb_epochs)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, best_test_acc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="6b4744ad-1251-435a-86b3-234b962b041d" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_10_fold(model_architecture, batch_size<span class="op">=</span>BATCH_SIZE, val_pct<span class="op">=</span>VAL_PCT, test_pct<span class="op">=</span>TEST_PCT, input_dim<span class="op">=</span>input_dim, hidden_dim<span class="op">=</span>hidden_dim, num_classes<span class="op">=</span>num_classes, device<span class="op">=</span>device, </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                                learning_rate<span class="op">=</span>learning_rate, weight_decay<span class="op">=</span>weight_decay, scheduler_patience<span class="op">=</span>scheduler_patience, scheduler_factor<span class="op">=</span>scheduler_factor,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                                nb_epochs<span class="op">=</span>nb_epochs, patience<span class="op">=</span>patience, plot_<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> {}</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    index_best_test_acc_all_folds <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    best_test_acc_all_folds <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f'Running fold </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>        train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, best_test_acc <span class="op">=</span> run_all(model_architecture, i, batch_size<span class="op">=</span>batch_size, val_pct<span class="op">=</span>val_pct, test_pct<span class="op">=</span>test_pct, input_dim<span class="op">=</span>input_dim, hidden_dim<span class="op">=</span>hidden_dim, num_classes<span class="op">=</span>num_classes, device<span class="op">=</span>device, </span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>                                learning_rate<span class="op">=</span>learning_rate, weight_decay<span class="op">=</span>weight_decay, scheduler_patience<span class="op">=</span>scheduler_patience, scheduler_factor<span class="op">=</span>scheduler_factor,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>                                nb_epochs<span class="op">=</span>nb_epochs, patience<span class="op">=</span>patience)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>        results[i] <span class="op">=</span> train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, best_test_acc</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> best_test_acc_all_folds <span class="op">&lt;</span> best_test_acc:</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>            best_test_acc_all_folds <span class="op">=</span> best_test_acc</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>            index_best_test_acc_all_folds <span class="op">=</span> i</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> plot_ <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>        train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, _ <span class="op">=</span> results[index_best_test_acc_all_folds]</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>        plot_metrics(train_losses, val_losses, test_losses, train_accs, val_accs, test_accs, suptitle<span class="op">=</span>plot_)</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cf4559e3-ac7f-4f64-81e5-79675ad2bad2" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> run_10_fold(Net, plot_<span class="op">=</span><span class="st">'Model 1'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running fold 0
+Epoch [0/200], Train loss: 3.829, Val loss: 3.345, Test loss: 3.199, Train acc: 0.66, Val acc: 0.71, Test acc: 0.67
+======== Early stopping at Epoch 110 ========
+Epoch [110/200], Train loss: 0.482, Val loss: 0.567, Test loss: 0.375, Train acc: 0.80, Val acc: 0.76, Test acc: 0.89
+Running fold 1
+Epoch [0/200], Train loss: 4.054, Val loss: 3.511, Test loss: 3.974, Train acc: 0.43, Val acc: 0.65, Test acc: 0.33
+======== Early stopping at Epoch 116 ========
+Epoch [116/200], Train loss: 0.364, Val loss: 0.447, Test loss: 0.550, Train acc: 0.84, Val acc: 0.82, Test acc: 0.78
+Running fold 2
+Epoch [0/200], Train loss: 3.886, Val loss: 3.619, Test loss: 3.519, Train acc: 0.56, Val acc: 0.76, Test acc: 0.56
+======== Early stopping at Epoch 66 ========
+Epoch [66/200], Train loss: 0.433, Val loss: 0.513, Test loss: 0.447, Train acc: 0.80, Val acc: 0.71, Test acc: 0.78
+Running fold 3
+Epoch [0/200], Train loss: 3.244, Val loss: 2.872, Test loss: 2.937, Train acc: 0.56, Val acc: 0.71, Test acc: 0.61
+======== Early stopping at Epoch 97 ========
+Epoch [97/200], Train loss: 0.452, Val loss: 0.342, Test loss: 0.252, Train acc: 0.77, Val acc: 0.94, Test acc: 1.00
+Running fold 4
+Epoch [0/200], Train loss: 4.239, Val loss: 3.605, Test loss: 4.701, Train acc: 0.65, Val acc: 0.53, Test acc: 0.78
+======== Early stopping at Epoch 111 ========
+Epoch [111/200], Train loss: 0.429, Val loss: 0.364, Test loss: 0.693, Train acc: 0.80, Val acc: 0.94, Test acc: 0.67
+Running fold 5
+Epoch [0/200], Train loss: 3.624, Val loss: 3.493, Test loss: 3.546, Train acc: 0.37, Val acc: 0.24, Test acc: 0.22
+======== Early stopping at Epoch 84 ========
+Epoch [84/200], Train loss: 0.450, Val loss: 0.604, Test loss: 0.370, Train acc: 0.80, Val acc: 0.82, Test acc: 0.89
+Running fold 6
+Epoch [0/200], Train loss: 4.061, Val loss: 3.697, Test loss: 3.498, Train acc: 0.40, Val acc: 0.24, Test acc: 0.39
+======== Early stopping at Epoch 100 ========
+Epoch [100/200], Train loss: 0.437, Val loss: 0.461, Test loss: 0.718, Train acc: 0.85, Val acc: 0.71, Test acc: 0.67
+Running fold 7
+Epoch [0/200], Train loss: 3.738, Val loss: 3.287, Test loss: 3.286, Train acc: 0.65, Val acc: 0.82, Test acc: 0.67
+======== Early stopping at Epoch 172 ========
+Epoch [172/200], Train loss: 0.408, Val loss: 0.387, Test loss: 0.457, Train acc: 0.82, Val acc: 0.88, Test acc: 0.83
+Running fold 8
+Epoch [0/200], Train loss: 4.053, Val loss: 4.000, Test loss: 4.020, Train acc: 0.64, Val acc: 0.65, Test acc: 0.78
+======== Early stopping at Epoch 98 ========
+Epoch [98/200], Train loss: 0.431, Val loss: 0.941, Test loss: 0.509, Train acc: 0.79, Val acc: 0.71, Test acc: 0.83
+Running fold 9
+Epoch [0/200], Train loss: 3.821, Val loss: 3.376, Test loss: 3.434, Train acc: 0.44, Val acc: 0.41, Test acc: 0.39
+======== Early stopping at Epoch 117 ========
+Epoch [117/200], Train loss: 0.408, Val loss: 0.378, Test loss: 0.545, Train acc: 0.83, Val acc: 0.88, Test acc: 0.83</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gnn_mewispool_files/figure-html/cell-27-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="e3862792-3287-4f9f-8f88-09eba04c5a32" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>results_5 <span class="op">=</span> run_10_fold(Net_complex, plot_<span class="op">=</span><span class="st">'Model - 5 GinConv layers'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running fold 0
+Epoch [0/200], Train loss: 3.862, Val loss: 3.237, Test loss: 3.277, Train acc: 0.64, Val acc: 0.88, Test acc: 0.67
+======== Early stopping at Epoch 72 ========
+Epoch [72/200], Train loss: 0.443, Val loss: 0.721, Test loss: 0.534, Train acc: 0.80, Val acc: 0.47, Test acc: 0.67
+Running fold 1
+Epoch [0/200], Train loss: 3.777, Val loss: 3.742, Test loss: 3.884, Train acc: 0.66, Val acc: 0.71, Test acc: 0.67
+======== Early stopping at Epoch 69 ========
+Epoch [69/200], Train loss: 0.412, Val loss: 0.646, Test loss: 0.645, Train acc: 0.84, Val acc: 0.59, Test acc: 0.67
+Running fold 2
+Epoch [0/200], Train loss: 4.169, Val loss: 3.962, Test loss: 3.512, Train acc: 0.66, Val acc: 0.76, Test acc: 0.56
+======== Early stopping at Epoch 162 ========
+Epoch [162/200], Train loss: 0.431, Val loss: 0.591, Test loss: 0.591, Train acc: 0.79, Val acc: 0.76, Test acc: 0.72
+Running fold 3
+Epoch [0/200], Train loss: 3.997, Val loss: 3.486, Test loss: 3.679, Train acc: 0.34, Val acc: 0.29, Test acc: 0.39
+======== Early stopping at Epoch 71 ========
+Epoch [71/200], Train loss: 0.524, Val loss: 0.593, Test loss: 0.420, Train acc: 0.71, Val acc: 0.59, Test acc: 0.83
+Running fold 4
+Epoch [0/200], Train loss: 3.927, Val loss: 3.782, Test loss: 4.302, Train acc: 0.42, Val acc: 0.18, Test acc: 0.22
+======== Early stopping at Epoch 134 ========
+Epoch [134/200], Train loss: 0.418, Val loss: 0.385, Test loss: 0.578, Train acc: 0.82, Val acc: 0.82, Test acc: 0.78
+Running fold 5
+Epoch [0/200], Train loss: 3.564, Val loss: 3.137, Test loss: 3.362, Train acc: 0.66, Val acc: 0.59, Test acc: 0.78
+======== Early stopping at Epoch 137 ========
+Epoch [137/200], Train loss: 0.420, Val loss: 0.565, Test loss: 0.413, Train acc: 0.82, Val acc: 0.76, Test acc: 0.78
+Running fold 6
+Epoch [0/200], Train loss: 3.705, Val loss: 3.420, Test loss: 3.359, Train acc: 0.67, Val acc: 0.53, Test acc: 0.61
+======== Early stopping at Epoch 170 ========
+Epoch [170/200], Train loss: 0.371, Val loss: 0.624, Test loss: 0.693, Train acc: 0.85, Val acc: 0.71, Test acc: 0.72
+Running fold 7
+Epoch [0/200], Train loss: 4.519, Val loss: 3.666, Test loss: 3.849, Train acc: 0.69, Val acc: 0.47, Test acc: 0.67
+======== Early stopping at Epoch 104 ========
+Epoch [104/200], Train loss: 0.410, Val loss: 0.568, Test loss: 0.469, Train acc: 0.83, Val acc: 0.71, Test acc: 0.83
+Running fold 8
+Epoch [0/200], Train loss: 3.668, Val loss: 3.080, Test loss: 3.429, Train acc: 0.43, Val acc: 0.35, Test acc: 0.22
+======== Early stopping at Epoch 137 ========
+Epoch [137/200], Train loss: 0.459, Val loss: 0.472, Test loss: 0.545, Train acc: 0.75, Val acc: 0.76, Test acc: 0.83
+Running fold 9
+Epoch [0/200], Train loss: 4.072, Val loss: 3.747, Test loss: 3.781, Train acc: 0.38, Val acc: 0.12, Test acc: 0.39
+======== Early stopping at Epoch 80 ========
+Epoch [80/200], Train loss: 0.426, Val loss: 0.571, Test loss: 0.400, Train acc: 0.81, Val acc: 0.65, Test acc: 0.89</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gnn_mewispool_files/figure-html/cell-28-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="9e325e5c-7f7b-45fe-b323-db7f3e9e358a" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>test_accuracy_results <span class="op">=</span> np.mean([results[i][<span class="dv">5</span>][<span class="op">-</span><span class="dv">1</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(results))])</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>best_test_accuracy_results <span class="op">=</span> np.mean([results[i][<span class="dv">6</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(results))])</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Simple model'</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Average accuracy at last epoch: </span><span class="sc">{</span><span class="bu">round</span>(test_accuracy_results<span class="op">*</span><span class="dv">100</span>, <span class="dv">2</span>)<span class="sc">}</span><span class="ss">%'</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Average accuracy at best epoch: </span><span class="sc">{</span><span class="bu">round</span>(best_test_accuracy_results<span class="op">*</span><span class="dv">100</span>, <span class="dv">2</span>)<span class="sc">}</span><span class="ss">%'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple model
+Average accuracy at last epoch: 81.67%
+Average accuracy at best epoch: 82.22%</code></pre>
+</div>
+</div>
+<div id="f4ac82c0-fbb1-4669-bf06-3f0967d829f6" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>test_accuracy_results_5 <span class="op">=</span> np.mean([results_5[i][<span class="dv">5</span>][<span class="op">-</span><span class="dv">1</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(results_5))])</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>best_test_accuracy_results_5 <span class="op">=</span> np.mean([results_5[i][<span class="dv">6</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(results_5))])</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Complex model'</span>)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Average accuracy at last epoch: </span><span class="sc">{</span><span class="bu">round</span>(test_accuracy_results_5<span class="op">*</span><span class="dv">100</span>, <span class="dv">2</span>)<span class="sc">}</span><span class="ss">%'</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Average accuracy at best epoch: </span><span class="sc">{</span><span class="bu">round</span>(best_test_accuracy_results_5<span class="op">*</span><span class="dv">100</span>, <span class="dv">2</span>)<span class="sc">}</span><span class="ss">%'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Complex model
+Average accuracy at last epoch: 77.22%
+Average accuracy at best epoch: 79.44%</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/GerardTho\.github\.io\/ML_research_seminar\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
