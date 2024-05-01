@@ -133,6 +133,10 @@ window.Quarto = {
     <a class="nav-link" href="../chapters/Conclusion.html"> 
 <span class="menu-text">Conclusion</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../chapters/Slides.html"> 
+<span class="menu-text">Slides</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
@@ -210,12 +214,17 @@ window.Quarto = {
 <p>In this section, we will provide definitions for the main convolution techniques we consider.</p>
 <section id="graph-convolutional-network-gcnconv" class="level3">
 <h3 class="anchored" data-anchor-id="graph-convolutional-network-gcnconv">Graph Convolutional Network (GCNconv)</h3>
-<p><span class="math display">\[h_i' = \sigma \left( \sum_{j \in \mathcal{N}_i} \frac{1}{\sqrt{|\mathcal{N}_i| |\mathcal{N}_j|}} W h_j \right)\]</span> * W: parameters of the layer. * <span class="math inline">\(h_i\)</span>: features at node <span class="math inline">\(i\)</span>. * <span class="math inline">\(\mathcal{N}_i\)</span>: neighborhood of node <span class="math inline">\(i\)</span>.</p>
+<p><span class="math display">\[h_i' = \sigma \left( \sum_{j \in \mathcal{N}_i} \frac{1}{\sqrt{|\mathcal{N}_i| |\mathcal{N}_j|}} W h_j \right)\]</span></p>
+<ul>
+<li><p>W: parameters of the layer.</p></li>
+<li><p><span class="math inline">\(h_i\)</span>: features at node <span class="math inline">\(i\)</span>.</p></li>
+<li><p><span class="math inline">\(\mathcal{N}_i\)</span>: neighborhood of node <span class="math inline">\(i\)</span>.</p></li>
+</ul>
 <p>Graph Convolutional Network is a type of graph neural network that applies a convolutional filter on the graph nodes, similar to CNNs. The intuition behind GCNconv is that it updates the features of each node by aggregating the features of its neighboring nodes, and then applying a linear transformation to the aggregated features. This process allows the GCNconv to capture the local structural information of the graph and learn node representations that are informative for downstream tasks such as node classification and link prediction.</p>
 </section>
 <section id="graph-attention-networks-gat" class="level3">
 <h3 class="anchored" data-anchor-id="graph-attention-networks-gat">Graph Attention Networks (GAT)</h3>
-<p><span class="math inline">\(h'_i = \sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij} \mathbf{W}h_j\right)\)</span> <span class="math inline">\(\alpha_{ij}\)</span> : attention coefficient indicating the importance of node <span class="math inline">\(j\)</span>’s features to node <span class="math inline">\(i\)</span> <span class="math display">\[\alpha_{ij} = \frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_j]\right)\right)}{\sum_{k \in \mathcal{N}_i} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_k]\right)\right)}\]</span></p>
+<p><span class="math display">\[h'_i = \sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij} \mathbf{W}h_j\right)\]</span> <span class="math inline">\(\alpha_{ij}\)</span> : attention coefficient indicating the importance of node <span class="math inline">\(j\)</span>’s features to node <span class="math inline">\(i\)</span> <span class="math display">\[\alpha_{ij} = \frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_j]\right)\right)}{\sum_{k \in \mathcal{N}_i} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_k]\right)\right)}\]</span></p>
 <p>Graph Attention Networks (GAT) is a type of graph neural network that uses attention mechanisms to aggregate features from neighboring nodes. The intuition behind GAT is that different neighboring nodes may have different levels of importance when aggregating features for a given node. By using attention coefficients, GAT can learn to weight the contributions of each neighboring node based on their relevance to the target node. This allows GAT to capture complex dependencies between nodes and learn more expressive node representations than other graph neural networks.</p>
 </section>
 <section id="graph-isomorphism-network-convolution-ginconv" class="level3">
@@ -241,7 +250,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="self-attention-graph-pooling-sagpool">Self-Attention Graph Pooling (SAGPool)</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../images/selfAttentionGraphPooling.png" class="img-fluid figure-img"></p>
+<p><img src="../images/SagPool2.png" class="img-fluid figure-img"></p>
 <figcaption>Self-Attention Graph Pooling (SAGPool)</figcaption>
 </figure>
 </div>
