@@ -8,9 +8,9 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - gerardtho.kub.sspcloud.fr
+    - tgerard.kub.sspcloud.fr
   rules:
-  - host: gerardtho.kub.sspcloud.fr
+  - host: tgerard.kub.sspcloud.fr
     http:
       paths:
       - path: /
