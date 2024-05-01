@@ -1,5 +1,5 @@
 ---
-title: "Graph Neural Networks"
+title: "Benchmark: Interactions between Convolution and Pooling layers in Graph Neural Networks"
 ---
 
 # Welcome to Our Machine Learning Project
