@@ -58,7 +58,7 @@ docker build . -t gnn
 ```
 
 ```
-docker run -p 5000:5000 -p 8000:8000 -it gnn 
+docker run -p 5000:5000 -it gnn 
 ```
 
 # Project organization
