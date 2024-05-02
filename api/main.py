@@ -11,8 +11,8 @@ import json
 import pandas as pd
 
 app = FastAPI(
-    title="blbllb",
-    description="MARCHE"
+    title="Inference of molecule types",
+    description="This is done over 3 possible datasets (MUTAG, ENZYMES, PROTEINS). Please enter one of those before doing any inference."
     )
 
 
@@ -25,7 +25,7 @@ def show_welcome_page():
     return {
         "Message": "API",
         "Model_name": 'gcn',
-        "Model_version": "0.1",
+        "Model_version": "1.0.0",
     }
 
 
