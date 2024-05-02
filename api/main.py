@@ -12,7 +12,7 @@ import pandas as pd
 
 app = FastAPI(
     title="Inference of molecule types",
-    description="This is done over 3 possible datasets (MUTAG, ENZYMES, PROTEINS). Please enter one of those before doing any inference."
+    description="This is done over 3 possible datasets (MUTAG, ENZYMES, PROTEINS). Please enter one of those in mol_type field before doing any inference."
     )
 
 
@@ -24,7 +24,7 @@ def show_welcome_page():
 
     return {
         "Message": "API",
-        "Model_name": 'gcn',
+        "Model_name": 'gnn',
         "Model_version": "1.0.0",
     }
 

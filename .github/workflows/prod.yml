@@ -34,3 +34,5 @@ jobs:
             "AWS_S3_ENDPOINT=${{ secrets.AWS_S3_ENDPOINT }}"
             "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
             "AWS_SESSION_TOKEN=${{ secrets.AWS_SESSION_TOKEN }}"
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
