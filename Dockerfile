@@ -22,5 +22,6 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
    export AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) && \
    export AWS_SESSION_TOKEN=$(cat /run/secrets/AWS_SESSION_TOKEN)  && \
    chmod +x /install.sh  && \ 
-   /install.sh
+   /install.sh && \ 
+   chmod +x /api/run.sh 
 CMD ["bash", "-c", "./api/run.sh"]
