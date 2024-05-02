@@ -3,7 +3,7 @@ import os
 from model.training_script import train_model_from_config
 import torch
 from data.homophily.homophily_functions import get_homophily
-from visualisation.plot import prepare_data, to_table, save_plot
+from visualisation.plot import prepare_data, to_table, save_plot, visualisation_plot
 import logging
 import argparse
 
@@ -70,5 +70,7 @@ if __name__ == '__main__':
     plot = save_plot.Plot(list_dict)
     plot.plot_all(train=True)
     plot.plot_all(train=False)
+    vplot = visualisation_plot.VisualisationPlot(list_dict)
+    vplot.save()
     table = to_table.ToTable(list_dict, per_dataset=True)
     table.save_all()

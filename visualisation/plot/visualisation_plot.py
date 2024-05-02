@@ -18,10 +18,13 @@ class VisualisationPlot() :
 
     def __init__(self, list_dict : List[Dict]) :
         
-        self.path_scatter_plot = os.path.join('results', 'scatter_plot_3D', 'scatter_plot_3D.png')
-        self.path_pairplot = os.path.join('results', 'pairplot')
-        self.path_barplot = os.path.join('results', 'barplot')
-
+        self.path_scatter_plot = os.path.join('visualisation/results', 'scatter_plot_3D')
+        self.path_pairplot = os.path.join('visualisation/results', 'pairplot')
+        self.path_barplot = os.path.join('visualisation/results', 'barplot')
+        os.makedirs(self.path_scatter_plot, exist_ok=True)
+        os.makedirs(self.path_pairplot, exist_ok=True)
+        os.makedirs(self.path_barplot, exist_ok=True)
+        self.path_scatter_plot = os.path.join(self.path_scatter_plot, 'scatter_plot_3D.png')
         self.list_dict = list_dict
 
         # a dictionary that renames some keys for better visual results
@@ -207,8 +210,6 @@ class VisualisationPlot() :
 
         plt.savefig(self.path_scatter_plot)
 
-        plt.show()
-
         return
 
 
@@ -373,7 +374,6 @@ class VisualisationPlot() :
         plt.savefig(os.path.join(self.path_pairplot,
                                  f'pairplot_{dataset}.png')
         )
-        plt.show()
 
         return
 
@@ -560,6 +560,43 @@ class VisualisationPlot() :
                              f"-stack_{stack}-aggregate.png")
                 )
 
-        plt.show()
-
         return
+    
+    def save(self):
+        self.plot_bar_dataset(groupby="local_pooling_layer",
+                    stack=None,
+                    bar_width=0.12,
+                    x_figsize=12,
+                    padding_subplots=.005)
+        self.plot_bar_dataset(groupby="convolution_layer",
+                        stack=None,
+                        bar_width=0.4,
+                        x_figsize=12,
+                        padding_subplots=.005)
+        self.plot_bar_dataset(groupby="local_pooling_layer",
+                        stack="convolution_layer",
+                        bar_width=0.3,
+                        offset = .02,
+                        x_figsize=12,
+                        padding_subplots=.005)
+        self.plot_bar_dataset(groupby="convolution_layer",
+                       stack="local_pooling_layer",
+                       bar_width=0.07,
+                       offset=0.01,
+                       x_figsize=12,
+                       kwargs2={'bbox_to_anchor' : (1.01,1)},
+                       padding_subplots=.005)
+        self.pairplot_from_dict(
+                   [
+                       ('Training time','mean_accuracy'),
+                       ('nb_parameters','mean_accuracy'),
+                    ],
+                   dataset="MUTAG",
+                   dim_grid_subplots=(2,1),
+                   figsize=(8,9),
+                   plot=False,
+                   kwargs1={'alpha' : .7, 's' : 30.},
+                   kwargs2={'bbox_to_anchor' : (1.01,1)},
+                   kwargs3={'alpha' : .7, 'linestyle' : ':', 'linewidth' : .7},
+                   padding_subplots=.07
+                   )

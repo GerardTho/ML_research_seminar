@@ -143,7 +143,7 @@ def plot_from_dict(
     ax.set_ylabel("Mean accuracy")
     ax.set_zlabel("Homophily", labelpad=0.0)
 
-    plt.savefig("./Visualisation/results/scatter_plot_3D/scatter_plot_3D.png")
+    plt.savefig("./visualisation/results/scatter_plot_3D/scatter_plot_3D.png")
 
     plt.show()
 
@@ -302,7 +302,7 @@ def pairplot_from_dict(
 
     plt.tight_layout()
 
-    plt.savefig("./Visualisation/results/pairplot/pairplot.png")
+    plt.savefig("./visualisation/results/pairplot/pairplot.png")
 
     # Show the plot
     plt.show()
@@ -608,14 +608,14 @@ def plot_bar_dataset(
         bbox_inches = bbox.transformed(plt.gcf().dpi_scale_trans.inverted())
 
         # Save the subplot using the bounding box
-        plt.savefig(f"./Visualisation/results/barplot/barplot-groupby_{groupby}"
+        plt.savefig(f"./visualisation/results/barplot/barplot-groupby_{groupby}"
                     f"-stack_{stack}-dataset_{dataset}.png", bbox_inches=bbox_inches)
 
     # Adjust the spacing after creating subplots
     plt.tight_layout()
     plt.subplots_adjust(hspace=0.5)
     plt.savefig(
-            f"./Visualisation/results/barplot/barplot-groupby_{groupby}"
+            f"./visualisation/results/barplot/barplot-groupby_{groupby}"
             f"-stack_{stack}-aggregate.png"
             )
 
@@ -648,7 +648,7 @@ def plot_losses(list_dict, train="train"):
                     + dict["global_pooling_layer"]
                 )
                 plt.savefig(
-                    "./Visualisation/results/losses/"
+                    "./visualisation/results/losses/"
                     + train
                     + "/"
                     + dict["dataset"]
@@ -676,7 +676,7 @@ def plot_losses(list_dict, train="train"):
                     + dict["global_pooling_layer"]
                 )
                 plt.savefig(
-                    "./Visualisation/results/losses/"
+                    "./visualisation/results/losses/"
                     + train
                     + "/"
                     + dict["dataset"]
@@ -801,7 +801,7 @@ def plot_acc_parameters(list_dict):
             prop={"size": 10},
         )
         plt.savefig(
-            f"./Visualisation/results/acc_parameters/{dataset}.png", bbox_inches="tight"
+            f"./visualisation/results/acc_parameters/{dataset}.png", bbox_inches="tight"
         )
         plt.close()
 
@@ -896,7 +896,7 @@ def plot_acc_time_epoch(
             prop={"size": 10},
         )
         plt.savefig(
-            f"./Visualisation/results/{save_dir}/{dataset}.png", bbox_inches="tight"
+            f"./visualisation/results/{save_dir}/{dataset}.png", bbox_inches="tight"
         )
         plt.close()
 
@@ -937,7 +937,7 @@ def plot_acc(list_dict, train="train"):
                     + dict["global_pooling_layer"]
                 )
                 plt.savefig(
-                    "./Visualisation/results/acc/"
+                    "./visualisation/results/acc/"
                     + train
                     + "/"
                     + dict["dataset"]
@@ -965,7 +965,7 @@ def plot_acc(list_dict, train="train"):
                     + dict["global_pooling_layer"]
                 )
                 plt.savefig(
-                    "./Visualisation/results/acc/"
+                    "./visualisation/results/acc/"
                     + train
                     + "/"
                     + dict["dataset"]
@@ -1029,7 +1029,7 @@ def plot_acc_and_loss(list_dict, train="train"):
                 )
                 plt.tight_layout()
                 plt.savefig(
-                    "./Visualisation/results/acc_and_loss/"
+                    "./visualisation/results/acc_and_loss/"
                     + train
                     + "/"
                     + dict["dataset"]
@@ -1058,7 +1058,7 @@ def plot_acc_and_loss(list_dict, train="train"):
                 )
                 plt.tight_layout()
                 plt.savefig(
-                    "./Visualisation/results/acc_and_loss/"
+                    "./visualisation/results/acc_and_loss/"
                     + train
                     + "/"
                     + dict["dataset"]

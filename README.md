@@ -1,4 +1,4 @@
-# Graph Neural Networks for Graph Classification Benchmark
+# Graph Neural Networks for Graph Classification Benchmark [![Construction image Docker](https://github.com/GerardTho/ML_research_seminar/actions/workflows/prod.yml/badge.svg)](https://github.com/GerardTho/ML_research_seminar/actions/workflows/prod.yml) [![Quarto Publish](https://github.com/GerardTho/ML_research_seminar/actions/workflows/publish.yml/badge.svg)](https://github.com/GerardTho/ML_research_seminar/actions/workflows/publish.yml)
 
 This project aims to compare the interactions between convolutional, pooling and readout layers on a graph classification task.
 
@@ -8,7 +8,7 @@ This is a simplified version of an original research project done for the M2DS c
 
 # Credentials
 
-If you are not using an ssp cloud service, you might need to add your credentials in a .env file
+If you are not using an ssp cloud service, you might need to add your credentials in a .env file to run the steps in local
 
 # Download data
 
