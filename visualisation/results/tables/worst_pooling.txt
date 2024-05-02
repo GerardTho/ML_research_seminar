@@ -2,6 +2,8 @@
 \toprule
 Dataset & ENZYMES & MUTAG & PROTEINS \\
 \midrule
-GCN & None & None & None \\
+GAT & SAG & SAG & None \\
+GCN & TOPK & None & TOPK \\
+GINConv & None & None & None \\
 \bottomrule
 \end{tabular}
