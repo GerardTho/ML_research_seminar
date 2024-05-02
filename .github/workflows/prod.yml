@@ -6,7 +6,7 @@ on:
       - main
       - dev
     tags:
-
+      - '*'
 jobs:
   docker:
     runs-on: ubuntu-latest
