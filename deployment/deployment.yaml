@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: gnn
-        image: gerardtho/gnn:1.0.2
+        image: gerardtho/gnn:1.0.3
         ports:
         - containerPort: 5000
