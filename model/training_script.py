@@ -352,10 +352,10 @@ def train_model_from_config(file_path):
 
     os.makedirs(output_model_path, exist_ok=True)
 
-    model_name = f"{dataset_name}"
-    f"_{conv_layer}"
-    f"_{global_pooling_layer}"
-    f"_{local_pooling_layer}"
+    model_name = (f"{dataset_name}"
+                  f"_{conv_layer}"
+                  f"_{global_pooling_layer}"
+                  f"_{local_pooling_layer}")
 
     torch.save(
         best_model.state_dict(), os.path.join(output_model_path, model_name)

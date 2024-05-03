@@ -454,11 +454,9 @@ class VisualisationPlot:
         # first, create a dictionary whose keys are the dataset and values are
         # the list of all element from list_dict for this dataset
         data_by_dataset = {}
-
         for entry in self.list_dict:
 
             dataset = entry["dataset"]
-
             if dataset not in data_by_dataset:
                 data_by_dataset[dataset] = []
 
