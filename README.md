@@ -28,19 +28,27 @@ pip install -r requirements.txt
 
 ## Download data
 
+The data is available on an ssp cloud bucket which can be modified in data/config.yml. It can be automatically downloaded using :
+
 ```
 python data/download_data.py 
 ```
 
+If you are not on an ssp-cloud instance this step will take a lot of time.
+
 ## Train the pipeline
+
+To retrain all the models of the pipeline run :
 
 ```
 python main.py
 ```
 
-One need to place the basic config templates inside the folder for each different dataset alongside the main config at the root of the configs folder.
+The configs/config.yml will monitor the different layers to put in the models. Only some layers are supported.
 
-The training can be monitored using tensorboard on the ULR http://localhost:6006/ after running the command :
+One also needs to place the config templates inside the folder for each different dataset.
+
+The training can then be monitored using tensorboard on the ULR http://localhost:6006/ after running the command :
 
 ```
 tensorboard --logdir="logs/runs"
