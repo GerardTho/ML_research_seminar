@@ -4,8 +4,6 @@ matrix:
   apsell:
     mode: en
   dictionary:
-    wordlists:
-    - .wordlist.txt
     output: wordlist.dic
     encoding: utf-8
   pipeline:
