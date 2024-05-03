@@ -4,6 +4,7 @@ Pooling layers in Graph Neural Networks"
 format: 
     revealjs: 
         slide-number: true
+        code-fold: true
 controls: true
 ---
 
@@ -404,3 +405,37 @@ th {
     </tr>
   </tbody>
 </table>
+
+## Results by architecture
+
+|     |      | ENZYMES | MUTAG | NCI1 | PROTEINS | Total Time |
+| --- | --- | --- | --- | --- | --- | --- |
+| GAT | MEWIS | $0.295	\pm0.040$ | $0.742	\pm0.086$ | $0.693	\pm0.008$ | $0.722	\pm0.022$ | 3225 |
+|  | None | $0.310	\pm0.053$ | $0.679	\pm0.087$ | $0.659	\pm0.023$ | $0.734	\pm0.027$ | 90 |
+| GCN | EDGE | $0.294	\pm0.026$ | $0.703	\pm0.081$ | $0.717	\pm0.015$ | **$0.753	\pm0.024$** | 1327 |
+|  | None | $0.316	\pm0.044$ | $0.703	\pm0.065$ | $0.651	\pm0.015$ | $0.743	\pm0.029$ | 40 |
+|  | TOPK | $0.176	\pm0.035$ | $0.739	\pm0.075$ | $0.631	\pm0.034$ | $0.694	\pm0.032$ | 55 |
+| GIN | EDGE | **$0.353	\pm0.039$** | **$0.847	\pm0.063$** | $0.735	\pm0.010$ | $0.731	\pm0.017$ | 1156 |
+|  | MEWIS | $0.309	\pm0.055$ | $0.789	\pm0.077$ | **$0.744	\pm0.006$** | $0.743	\pm0.016$ | 4365 |
+
+Best pooling per architecture :
+
+| Dataset | ENZYMES | MUTAG | NCI1 | PROTEINS |
+| --- | --- | --- | --- | --- |
+| GAT | None | MEWIS | MEWIS | None |
+| GCN | None | TOPK | EDGE | **EDGE** |
+| GIN | **EDGE** | **EDGE** | **MEWIS** | MEWIS |
+
+## Conclusion
+
+Key idea
+
+- GNN/CNN : convolution / pooling
+- Best pairing : GINConv - Edge / Mewis pool
+- Attention : dataset / architecture
+
+Work to be done
+
+- Bigger datasets
+- Tuning the architecture
+- Other methods
