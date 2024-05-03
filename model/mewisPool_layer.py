@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torch_geometric.nn import GINConv
 from torch_geometric.utils import get_laplacian
+
 
 class MLP(nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim, enhance=False):
@@ -37,7 +37,7 @@ class MLP(nn.Module):
         x = self.fc3(x)
 
         return x
-        
+
 
 class MEWISPool(nn.Module):
     def __init__(self, hidden_dim, device):
@@ -45,17 +45,24 @@ class MEWISPool(nn.Module):
         self.device = device
 
         self.gc1 = GINConv(MLP(1, hidden_dim, hidden_dim).to(self.device))
-        self.gc2 = GINConv(MLP(hidden_dim, hidden_dim, hidden_dim).to(self.device))
+        self.gc2 = GINConv(
+            MLP(hidden_dim, hidden_dim, hidden_dim).to(self.device)
+        )
         self.gc3 = GINConv(MLP(hidden_dim, hidden_dim, 1).to(self.device))
-
 
     def compute_entropy(self, x, L, A, batch):
         # computing local variations; Eq. (5)
-        V = x * torch.matmul(L, x) - x * torch.matmul(A, x) + torch.matmul(A, x * x)
+        V = (
+            x * torch.matmul(L, x)
+            - x * torch.matmul(A, x)
+            + torch.matmul(A, x * x)
+        )
         V = torch.norm(V, dim=1)
 
-        P = torch.cat([torch.softmax(V[batch == i], dim=0) for i in torch.unique(batch)])
-        P[P == 0.] += 1
+        P = torch.cat(
+            [torch.softmax(V[batch == i], dim=0) for i in torch.unique(batch)]
+        )
+        P[P == 0.0] += 1
 
         H = -P * torch.log(P)
 
@@ -63,11 +70,17 @@ class MEWISPool(nn.Module):
 
     def loss_fn(self, entropies, probabilities, A, gamma):
         entropy_proba = torch.matmul(entropies.t(), probabilities)[0, 0]
-        proba_proba = torch.matmul(torch.matmul(probabilities.t(), A), probabilities).sum()
+        proba_proba = torch.matmul(
+            torch.matmul(probabilities.t(), A), probabilities
+        ).sum()
         return gamma - entropy_proba + proba_proba
 
-    def conditional_expectation(self, entropies, probabilities, A, threshold, gamma):
-        sorted_probabilities = torch.sort(probabilities, descending=True, dim=0)
+    def conditional_expectation(
+        self, entropies, probabilities, A, threshold, gamma
+    ):
+        sorted_probabilities = torch.sort(
+            probabilities, descending=True, dim=0
+        )
 
         dummy_probabilities = probabilities.detach().clone()
         selected = set()
@@ -106,16 +119,20 @@ class MEWISPool(nn.Module):
         A2 = A2[mewis_indices][:, mewis_indices]
         A3 = A3[mewis_indices][:, mewis_indices]
 
-        I = torch.eye(len(mewis_indices)).to(self.device)
-        one = torch.ones([len(mewis_indices), len(mewis_indices)]).to(self.device)
+        identity = torch.eye(len(mewis_indices)).to(self.device)
+        one = torch.ones([len(mewis_indices), len(mewis_indices)]).to(
+            self.device
+        )
 
-        adj_pooled = (one - I) * torch.clamp(A2 + A3, min=0, max=1)
+        adj_pooled = (one - identity) * torch.clamp(A2 + A3, min=0, max=1)
 
         return x_pooled, adj_pooled
 
     def to_edge_index(self, adj_pooled, mewis, batch):
         row1, row2 = torch.where(adj_pooled > 0)
-        edge_index_pooled = torch.cat([row1.unsqueeze(0), row2.unsqueeze(0)], dim=0)
+        edge_index_pooled = torch.cat(
+            [row1.unsqueeze(0), row2.unsqueeze(0)], dim=0
+        )
         batch_pooled = batch[mewis]
 
         return edge_index_pooled, batch_pooled
@@ -124,11 +141,14 @@ class MEWISPool(nn.Module):
         # computing the graph laplacian and adjacency matrix
         batch_nodes = batch.size(0)
         L_indices, L_weights = get_laplacian(edge_index)
-        L = torch.sparse_coo_tensor(L_indices, L_weights, 
-                                    torch.Size([batch_nodes, batch_nodes])).to(self.device)
-        A = (torch.diag(torch.diag(L.to_dense())) - L.to_dense()).to(self.device)
+        L = torch.sparse_coo_tensor(
+            L_indices, L_weights, torch.Size([batch_nodes, batch_nodes])
+        ).to(self.device)
+        A = (torch.diag(torch.diag(L.to_dense())) - L.to_dense()).to(
+            self.device
+        )
 
-        entropies = self.compute_entropy(x, L, A, batch) 
+        entropies = self.compute_entropy(x, L, A, batch)
 
         # graph convolution and probability scores
         probabilities = self.gc1(entropies, edge_index)
@@ -140,10 +160,14 @@ class MEWISPool(nn.Module):
         gamma = entropies.sum().to(self.device)
         loss = self.loss_fn(entropies, probabilities, A, gamma)  # Eq. (9)
 
-        mewis_indices = self.conditional_expectation(entropies, probabilities, A, loss, gamma)
+        mewis_indices = self.conditional_expectation(
+            entropies, probabilities, A, loss, gamma
+        )
 
         # graph reconstruction
         x_pooled, adj_pooled = self.graph_reconstruction(mewis_indices, x, A)
-        edge_index_pooled, batch_pooled = self.to_edge_index(adj_pooled, mewis_indices, batch)
+        edge_index_pooled, batch_pooled = self.to_edge_index(
+            adj_pooled, mewis_indices, batch
+        )
 
         return x_pooled, edge_index_pooled, batch_pooled, loss

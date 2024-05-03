@@ -3,7 +3,6 @@ from typing import List, Dict, Tuple, Any
 import numpy as np
 
 import matplotlib.pyplot as plt
-import matplotlib.markers as markers
 import matplotlib.patches as mpatches
 from matplotlib.transforms import Bbox
 
@@ -14,36 +13,40 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class VisualisationPlot() :
 
-    def __init__(self, list_dict : List[Dict]) :
-        
-        self.path_scatter_plot = os.path.join('visualisation/results', 'scatter_plot_3D')
-        self.path_pairplot = os.path.join('visualisation/results', 'pairplot')
-        self.path_barplot = os.path.join('visualisation/results', 'barplot')
+class VisualisationPlot:
+
+    def __init__(self, list_dict: List[Dict]):
+
+        self.path_scatter_plot = os.path.join(
+            "visualisation/results", "scatter_plot_3D"
+        )
+        self.path_pairplot = os.path.join("visualisation/results", "pairplot")
+        self.path_barplot = os.path.join("visualisation/results", "barplot")
         os.makedirs(self.path_scatter_plot, exist_ok=True)
         os.makedirs(self.path_pairplot, exist_ok=True)
         os.makedirs(self.path_barplot, exist_ok=True)
-        self.path_scatter_plot = os.path.join(self.path_scatter_plot, 'scatter_plot_3D.png')
+        self.path_scatter_plot = os.path.join(
+            self.path_scatter_plot, "scatter_plot_3D.png"
+        )
         self.list_dict = list_dict
 
         # a dictionary that renames some keys for better visual results
         self.rename_dict = {
-                'mean_accuracy' : 'Mean accuracy',
-                'homophily' : 'Homophily',
-                'nb_parameters' : 'Number of parameters',
-                'avg_nodes' : 'Average number of nodes',
-                'avg_edges' : 'Average number of edges',
-                'local_pooling_layer' : 'Local pooling layer',
-                'convolution_layer' : 'Convolution layer',
-            }
-                
+            "mean_accuracy": "Mean accuracy",
+            "homophily": "Homophily",
+            "nb_parameters": "Number of parameters",
+            "avg_nodes": "Average number of nodes",
+            "avg_edges": "Average number of edges",
+            "local_pooling_layer": "Local pooling layer",
+            "convolution_layer": "Convolution layer",
+        }
+
         self.set_convolution_mapping()
         self.set_pooling_mapping()
         self.set_grouped_list()
 
-
-    def set_convolution_mapping(self) -> None :
+    def set_convolution_mapping(self) -> None:
         """
         For the shape of the points of the following plot functions, we will
         need a mapping of the value of the architecture to the shapes
@@ -58,11 +61,26 @@ class VisualisationPlot() :
 
         if len(unique_convolutions) > 41:
             raise Exception(
-                f"Not enough possible values of shape for the convolutions : got {len(convolutions)} but expected 41 at most"
+                f"""Not enough possible values of shape for the convolutions :
+                got {len(convolutions)} but expected 41 at most"""
             )
-        
-        # same as for the colors: creating a mapping of the convolutions to the shapes
-        existing_shapes = ['o', 's', '^', '>', '<', 'p', '*', 'h', 'H', '+', 'x', 'D', 'd']
+
+        # creating a mapping of the convolutions to the shapes
+        existing_shapes = [
+            "o",
+            "s",
+            "^",
+            ">",
+            "<",
+            "p",
+            "*",
+            "h",
+            "H",
+            "+",
+            "x",
+            "D",
+            "d",
+        ]
         shape_mapping = {}
 
         for i, value in enumerate(unique_convolutions):
@@ -74,8 +92,7 @@ class VisualisationPlot() :
         self.shape_mapping = shape_mapping
         self.shapes = shapes
 
-
-    def set_pooling_mapping(self) -> None :
+    def set_pooling_mapping(self) -> None:
         """
         For the color of the points of the following plot functions, we will
         need a mapping of the pooling to the colors
@@ -88,7 +105,10 @@ class VisualisationPlot() :
 
         colors = plt.cm.hsv(np.linspace(0, 1, 100))
         color_map = plt.cm.colors.ListedColormap(colors)
-        existing_colors = [color_map(i / len(unique_poolings)) for i in range(len(unique_poolings))]
+        existing_colors = [
+            color_map(i / len(unique_poolings))
+            for i in range(len(unique_poolings))
+        ]
 
         color_mapping = {}
         # creating a dictionary that maps each value of pooling to a color
@@ -103,8 +123,7 @@ class VisualisationPlot() :
         self.color_mapping = color_mapping
         self.colors = colors
 
-
-    def set_grouped_list(self) -> None :
+    def set_grouped_list(self) -> None:
         """
         Set a list of list of the dictionaries of list_dict, groupby
         the pooling (this will be used for the following function
@@ -122,8 +141,9 @@ class VisualisationPlot() :
 
         self.grouped_list = grouped_list
 
-
-    def get_mean_tuple_list(tuple_list: List[Tuple[float, str]]) -> List[Tuple[float, str]]:
+    def get_mean_tuple_list(
+        tuple_list: List[Tuple[float, str]]
+    ) -> List[Tuple[float, str]]:
         """
         For a list of tuple, returns a dictionary with the unique values of str
         as keys and the mean of values as values
@@ -134,36 +154,32 @@ class VisualisationPlot() :
             prev_val, i = res[key]
             res[key] = (prev_val + val, i + 1)
 
-        get_mean = lambda t: t[0] / t[1]
+        return {key: value[0]/value[1] for key, value in res.items()}
 
-        return {key: get_mean(value) for key, value in res.items()}
-    
-
-    def get_list_dict_dataset(self, dataset : str | None) -> List[Dict]:
+    def get_list_dict_dataset(self, dataset: str | None) -> List[Dict]:
         """
         Returns the list dict but only for a given dataset (or just list_dict
         if dataset is None)
         """
-        if dataset is None :
+        if dataset is None:
             return self.list_dict
-        
-        possible_dataset = set([dic['dataset'] for dic in self.list_dict])
-        if not dataset in possible_dataset :
+
+        possible_dataset = set([dic["dataset"] for dic in self.list_dict])
+        if dataset not in possible_dataset:
             raise Exception(
-                f"The dataset {dataset} provided is not in the existing dataset {possible_dataset}"
+                f"""The dataset {dataset}
+                provided is not in the existing dataset {possible_dataset}"""
             )
-        
-        return [dic for dic in self.list_dict if dic['dataset'] == dataset]
-    
+
+        return [dic for dic in self.list_dict if dic["dataset"] == dataset]
 
     def plot_from_dict(
         self, figsize: Tuple[int, int] = (10, 6), **kwargs
     ) -> None:
         """
         Plot the graph resulting from the list of dictionary
-
-        figsize -> width and height of the figure (figsize argument matplotlib figure function)
-        **kwargs -> additional keyword arguments passed to matplotlib scatter function
+        figsize -> width and height of the figure (figsize argument)
+        **kwargs -> passed to matplotlib scatter function
         """
         # the x,y and z of the scatter in 3D
         x = np.array([d["nb_parameters"] for d in self.list_dict])
@@ -179,7 +195,9 @@ class VisualisationPlot() :
         colors_keys = list(self.color_mapping.keys())
         color_values = list(self.color_mapping.values())
         legend_color = [
-            mpatches.Patch(color=color_values[i], label=f"{colors_keys[i]}-pool")
+            mpatches.Patch(
+                color=color_values[i], label=f"{colors_keys[i]}-pool"
+            )
             for i in range(len(colors_keys))
         ]
 
@@ -188,11 +206,19 @@ class VisualisationPlot() :
         shape_keys = list(self.shape_mapping.keys())
         shape_values = list(self.shape_mapping.values())
         legend_shape = [
-            ax.scatter([], [], color="black", marker=shape_values[i], label=shape_keys[i])
+            ax.scatter(
+                [],
+                [],
+                color="black",
+                marker=shape_values[i],
+                label=shape_keys[i],
+            )
             for i in range(len(shape_keys))
         ]
 
-        for x_value, y_value, z_value, color, shape in zip(x, y, z, self.colors, self.shapes):
+        for x_value, y_value, z_value, color, shape in zip(
+            x, y, z, self.colors, self.shapes
+        ):
             ax.scatter(
                 x_value,
                 y_value,
@@ -212,44 +238,50 @@ class VisualisationPlot() :
 
         return
 
-
     def pairplot_from_dict(
         self,
         rows_to_plot: List[Tuple[str, str]],
-        dataset : str | None,
+        dataset: str | None,
         dim_grid_subplots: Tuple[int, int],
         figsize: Tuple[int, int] | None = None,
         plot: bool = True,
         kwargs1: Dict[str, Any] = {},
         kwargs2: Dict[str, Any] = {},
         kwargs3: Dict[str, Any] = {},
-        padding_subplots : float = 0.07
+        padding_subplots: float = 0.07,
     ) -> None:
         """
         Plot all the variables described in rows_to_plot in subfigures
 
 
-        rows_to_plot -> All the variables of the dictionnaries of list_dict we want to
-        plot (for instance, denoting (x,y) the first entry of rows_to_plot, the first plot will
-        be dict[x] for the x-axis and dict[y] for the y-axis, for dict in list_dict)
+        rows_to_plot -> All the variables of the dictionnaries
+        of list_dict we want to plot (for instance, denoting (x,y)
+        the first entry of rows_to_plot, the first plot will
+        be dict[x] for the x-axis and dict[y] for the y-axis,
+        for dict in list_dict)
 
-        dataset -> whether to consider the whole data (None) or just the data for a given dataset
+        dataset -> whether to consider the whole data (None)
+        or just the data for a given dataset
 
-        dim_grid_subplots -> the dimension of the grid of subplots (for instance (2,3) means that there
+        dim_grid_subplots -> the dimension of the grid of
+        subplots (for instance (2,3) means that there
         are two rows and 3 columns)
 
-        figsize -> width and height of the figure (figsize argument matplotlib figure function)
+        figsize -> width and height of the figure
+        (figsize argument matplotlib figure function)
 
         plot -> what kind of plot : if True, a plot, else a scatter
 
-        **kwargs1 -> additional keyword arguments passed to matplotlib scatter function
-        **kwargs2 -> additional keyword arguments passed to matplotlib legend function
-        **kwargs2 -> additional keyword arguments passed to matplotlib plot function (if plot)
+        **kwargs1 -> passed to matplotlib scatter function
+        **kwargs2 -> passed to matplotlib legend function
+        **kwargs2 -> passed to matplotlib plot function (if plot)
 
         padding_subplots -> the padding to save the box for each subplot
 
-        Raises error if some elements of the rows don't correspond to key values in list_dict,
-        or if the number of elements of rows_to_plot don't fit the dimension of dim_grid_subplots
+        Raises error if some elements of the rows
+        don't correspond to key values in list_dict,
+        or if the number of elements of rows_to_plot
+        don't fit the dimension of dim_grid_subplots
         """
         list_dict = self.get_list_dict_dataset(dataset)
 
@@ -281,7 +313,8 @@ class VisualisationPlot() :
             raise Exception(
                 f"The number of plots imposed by the dimension of the grid "
                 f"({n_plot_rows} x {n_plot_cols} = {n_plot_rows*n_plot_cols}) "
-                f"is not consistent with the number of plots ({len(rows_to_plot)}) "
+                f"""is not consistent with the number
+                of plots ({len(rows_to_plot)}) """
             )
 
         # doesn't change anything if we don't consider all the dataset
@@ -301,12 +334,18 @@ class VisualisationPlot() :
         for ax, (key1, key2) in zip(axs, rows_to_plot):
 
             legend_color = [
-                mpatches.Patch(color=color_values[i], label=f"{colors_keys[i]}-pool")
+                mpatches.Patch(
+                    color=color_values[i], label=f"{colors_keys[i]}-pool"
+                )
                 for i in range(len(colors_keys))
             ]
             legend_shape = [
                 ax.scatter(
-                    [], [], color="black", marker=shape_values[i], label=shape_keys[i]
+                    [],
+                    [],
+                    color="black",
+                    marker=shape_values[i],
+                    label=shape_keys[i],
                 )
                 for i in range(len(shape_keys))
             ]
@@ -314,7 +353,9 @@ class VisualisationPlot() :
             x_values = [dic[key1] for dic in list_dict]
             y_values = [dic[key2] for dic in list_dict]
 
-            for x_value, y_value, color, shape in zip(x_values, y_values, self.colors, self.shapes):
+            for x_value, y_value, color, shape in zip(
+                x_values, y_values, self.colors, self.shapes
+            ):
                 ax.scatter(
                     x_value,
                     y_value,
@@ -326,10 +367,16 @@ class VisualisationPlot() :
             if plot:
                 for i in range(n_grouped_list):
 
-                    x_plot = np.array([dic[key1] for dic in self.grouped_list[i]])
-                    y_plot = np.array([dic[key2] for dic in self.grouped_list[i]])
+                    x_plot = np.array(
+                        [dic[key1] for dic in self.grouped_list[i]]
+                    )
+                    y_plot = np.array(
+                        [dic[key2] for dic in self.grouped_list[i]]
+                    )
 
-                    plot_pooling = self.grouped_list[i][0]["local_pooling_layer"]
+                    plot_pooling = self.grouped_list[i][0][
+                        "local_pooling_layer"
+                    ]
                     color = self.color_mapping[plot_pooling]
 
                     x_plot_argsort = np.argsort(x_plot)
@@ -345,39 +392,43 @@ class VisualisationPlot() :
 
             ax.legend(handles=legend_color + legend_shape, **kwargs2)
 
-            ax.set_xscale('log')
+            ax.set_xscale("log")
 
-            ax.set_xlabel(self.rename_dict.get(key1,key1))
-            ax.set_ylabel(self.rename_dict.get(key2,key2))
+            ax.set_xlabel(self.rename_dict.get(key1, key1))
+            ax.set_ylabel(self.rename_dict.get(key2, key2))
 
             # Save the current subplot
-            # We need to draw the canvas to ensure that all elements are laid out correctly
+            # Draw the canvas to ensure that elements are laid out correctly
             plt.gcf().canvas.draw()
 
-            # Get the bounding box of the axis, including any labels, titles, etc.
+            # Get the bounding box of the axis
+            # Including any labels, titles, etc.
             bbox = ax.get_tightbbox(plt.gcf().canvas.get_renderer())
-            bbox_inches = bbox.transformed(plt.gcf().dpi_scale_trans.inverted())
+            bbox_inches = bbox.transformed(
+                plt.gcf().dpi_scale_trans.inverted()
+            )
 
             bbox_inches_expanded = Bbox.from_extents(
                 bbox_inches.x0 - padding_subplots,
                 bbox_inches.y0 - padding_subplots,
                 bbox_inches.x1 + padding_subplots,
-                bbox_inches.y1 + padding_subplots
+                bbox_inches.y1 + padding_subplots,
             )
 
             # Save the subplot using the bounding box
-            plt.savefig(os.path.join(self.path_pairplot,
-                                     f"pairplot-{key1}-{key2}.png"),
-                        bbox_inches=bbox_inches_expanded)
+            plt.savefig(
+                os.path.join(
+                    self.path_pairplot, f"pairplot-{key1}-{key2}.png"
+                ),
+                bbox_inches=bbox_inches_expanded,
+            )
 
         plt.tight_layout()
-        plt.savefig(os.path.join(self.path_pairplot,
-                                 f'pairplot_{dataset}.png')
+        plt.savefig(
+            os.path.join(self.path_pairplot, f"pairplot_{dataset}.png")
         )
 
         return
-
-
 
     def plot_bar_dataset(
         self,
@@ -390,8 +441,8 @@ class VisualisationPlot() :
         n_colors: int = 10,
         kwargs1: Dict[str, Any] = {},
         kwargs2: Dict[str, Any] = {},
-        padding_subplots : float = .005
-    ) -> None :
+        padding_subplots: float = 0.005,
+    ) -> None:
         """
         groupby -> the key along which each bar will be plotted
         stack -> the key along which each bar will be duplicated
@@ -430,7 +481,8 @@ class VisualisationPlot() :
         for ax, (dataset, records) in zip(axes, data_by_dataset.items()):
 
             groupby_values = np.unique([record[groupby] for record in records])
-            # the keys of this dictionary are the groupby values (value for each group
+            # the keys of this dictionary are
+            # the groupby values (value for each group
             # of barplot)
             mean_accuracies = {e: [] for e in groupby_values}
 
@@ -439,20 +491,26 @@ class VisualisationPlot() :
                 if stack is None:
                     mean_accuracies[e].append(record["mean_accuracy"])
                 else:
-                    # For the moment, mean_accuracies is a dictionary where each value
-                    # is the tuple of the mean accuracy and the str corresponding to the
+                    # For the moment, mean_accuracies
+                    # is a dictionary where each value
+                    # is the tuple of the mean accuracy
+                    # and the str corresponding to the
                     # stack variable
-                    mean_accuracies[e].append((record["mean_accuracy"], record[stack]))
+                    mean_accuracies[e].append(
+                        (record["mean_accuracy"], record[stack])
+                    )
 
             if stack is None:
                 # the list of the mean accuracy for each groupby variable
                 mean_accuracies = list(
-                    map(lambda l: sum(l) / len(l), mean_accuracies.values())
+                    map(lambda val: sum(val) / len(val),
+                        mean_accuracies.values())
                 )
             else:
-                # a dictionary of dictionary where for each dictionary, the key is the stack variable
-                # and the value is the average accuracy along each identical element across both the
-                # stack and groupby variable
+                # a dictionary of dictionary where for each dictionary,
+                # the key is the stack variable and the value is
+                # the average accuracy along each identical element
+                # across both the stack and groupby variable
                 mean_accuracies = {
                     key: VisualisationPlot.get_mean_tuple_list(value)
                     for key, value in mean_accuracies.items()
@@ -514,7 +572,10 @@ class VisualisationPlot() :
                     for j, accuracy in enumerate(accuracies):
                         ax.annotate(
                             f"{accuracy:.3f}",
-                            (index[j] + i * bar_width - offset_val, accuracy / 2),
+                            (
+                                index[j] + i * bar_width - offset_val,
+                                accuracy / 2,
+                            ),
                             textcoords="offset points",
                             xytext=(0, 0),
                             ha="center",
@@ -528,75 +589,92 @@ class VisualisationPlot() :
 
             ax.set_title(f"Dataset: {dataset}")
             ax.set_ylabel("Mean Accuracy")
-            ax.set_xlabel(self.rename_dict.get(groupby,groupby))
+            ax.set_xlabel(self.rename_dict.get(groupby, groupby))
 
             # Save the current subplot
-            # We need to draw the canvas to ensure that all elements are laid out correctly
+            # We need to draw the canvas to ensure
+            # that all elements are laid out correctly
             plt.gcf().canvas.draw()
 
-            # Get the bounding box of the axis, including any labels, titles, etc.
+            # Get the bounding box of the axis,
+            # including any labels, titles, etc.
             bbox = ax.get_tightbbox(plt.gcf().canvas.get_renderer())
-            bbox_inches = bbox.transformed(plt.gcf().dpi_scale_trans.inverted())
+            bbox_inches = bbox.transformed(
+                plt.gcf().dpi_scale_trans.inverted()
+            )
 
             bbox_inches_expanded = Bbox.from_extents(
                 bbox_inches.x0 - padding_subplots,
                 bbox_inches.y0 - padding_subplots,
                 bbox_inches.x1 + padding_subplots,
-                bbox_inches.y1 + padding_subplots
+                bbox_inches.y1 + padding_subplots,
             )
 
             # Save the subplot using the bounding box
-            plt.savefig(os.path.join(self.path_barplot,
-                                     f"barplot-groupby_{groupby}"
-                                     f"-stack_{stack}-dataset_{dataset}.png"),
-                        bbox_inches=bbox_inches_expanded)
+            plt.savefig(
+                os.path.join(
+                    self.path_barplot,
+                    f"barplot-groupby_{groupby}"
+                    f"-stack_{stack}-dataset_{dataset}.png",
+                ),
+                bbox_inches=bbox_inches_expanded,
+            )
 
         # Adjust the spacing after creating subplots
         plt.tight_layout()
         plt.subplots_adjust(hspace=0.5)
         plt.savefig(
-                os.path.join(self.path_barplot,
-                             f"barplot-groupby_{groupby}"
-                             f"-stack_{stack}-aggregate.png")
-                )
+            os.path.join(
+                self.path_barplot,
+                f"barplot-groupby_{groupby}" f"-stack_{stack}-aggregate.png",
+            )
+        )
 
         return
-    
+
     def save(self):
-        self.plot_bar_dataset(groupby="local_pooling_layer",
-                    stack=None,
-                    bar_width=0.12,
-                    x_figsize=12,
-                    padding_subplots=.005)
-        self.plot_bar_dataset(groupby="convolution_layer",
-                        stack=None,
-                        bar_width=0.4,
-                        x_figsize=12,
-                        padding_subplots=.005)
-        self.plot_bar_dataset(groupby="local_pooling_layer",
-                        stack="convolution_layer",
-                        bar_width=0.3,
-                        offset = .02,
-                        x_figsize=12,
-                        padding_subplots=.005)
-        self.plot_bar_dataset(groupby="convolution_layer",
-                       stack="local_pooling_layer",
-                       bar_width=0.07,
-                       offset=0.01,
-                       x_figsize=12,
-                       kwargs2={'bbox_to_anchor' : (1.01,1)},
-                       padding_subplots=.005)
+        self.plot_bar_dataset(
+            groupby="local_pooling_layer",
+            stack=None,
+            bar_width=0.12,
+            x_figsize=12,
+            padding_subplots=0.005,
+        )
+        self.plot_bar_dataset(
+            groupby="convolution_layer",
+            stack=None,
+            bar_width=0.4,
+            x_figsize=12,
+            padding_subplots=0.005,
+        )
+        self.plot_bar_dataset(
+            groupby="local_pooling_layer",
+            stack="convolution_layer",
+            bar_width=0.3,
+            offset=0.02,
+            x_figsize=12,
+            padding_subplots=0.005,
+        )
+        self.plot_bar_dataset(
+            groupby="convolution_layer",
+            stack="local_pooling_layer",
+            bar_width=0.07,
+            offset=0.01,
+            x_figsize=12,
+            kwargs2={"bbox_to_anchor": (1.01, 1)},
+            padding_subplots=0.005,
+        )
         self.pairplot_from_dict(
-                   [
-                       ('Training time','mean_accuracy'),
-                       ('nb_parameters','mean_accuracy'),
-                    ],
-                   dataset="MUTAG",
-                   dim_grid_subplots=(2,1),
-                   figsize=(8,9),
-                   plot=False,
-                   kwargs1={'alpha' : .7, 's' : 30.},
-                   kwargs2={'bbox_to_anchor' : (1.01,1)},
-                   kwargs3={'alpha' : .7, 'linestyle' : ':', 'linewidth' : .7},
-                   padding_subplots=.07
-                   )
+            [
+                ("Training time", "mean_accuracy"),
+                ("nb_parameters", "mean_accuracy"),
+            ],
+            dataset="MUTAG",
+            dim_grid_subplots=(2, 1),
+            figsize=(8, 9),
+            plot=False,
+            kwargs1={"alpha": 0.7, "s": 30.0},
+            kwargs2={"bbox_to_anchor": (1.01, 1)},
+            kwargs3={"alpha": 0.7, "linestyle": ":", "linewidth": 0.7},
+            padding_subplots=0.07,
+        )

@@ -1,14 +1,11 @@
+import os
+import pickle
 import os.path as osp
 from typing import Callable, List, Optional
-
 import torch
 from torch_geometric.data import Data, InMemoryDataset
 from torch_geometric.io import fs, read_tu_data
 
-from torch_geometric import datasets
-
-import os
-import pickle
 
 class Dataset(InMemoryDataset):
     r"""A variety of graph kernel benchmark datasets, *.e.g.*,
@@ -127,8 +124,13 @@ class Dataset(InMemoryDataset):
     ) -> None:
         self.name = name
         self.cleaned = cleaned
-        super().__init__(root, transform, pre_transform, pre_filter,
-                         force_reload=force_reload)
+        super().__init__(
+            root,
+            transform,
+            pre_transform,
+            pre_filter,
+            force_reload=force_reload,
+        )
 
         out = fs.torch_load(self.processed_paths[0])
         if not isinstance(out, tuple) or len(out) < 3:
@@ -136,7 +138,8 @@ class Dataset(InMemoryDataset):
                 "The 'data' object was created by an older version of PyG. "
                 "If this error occurred while loading an already existing "
                 "dataset, remove the 'processed/' directory in the dataset's "
-                "root folder and try again.")
+                "root folder and try again."
+            )
         assert len(out) == 3 or len(out) == 4
 
         if len(out) == 3:  # Backward compatibility.
@@ -170,28 +173,28 @@ class Dataset(InMemoryDataset):
 
     @property
     def num_node_labels(self) -> int:
-        return self.sizes['num_node_labels']
+        return self.sizes["num_node_labels"]
 
     @property
     def num_node_attributes(self) -> int:
-        return self.sizes['num_node_attributes']
+        return self.sizes["num_node_attributes"]
 
     @property
     def num_edge_labels(self) -> int:
-        return self.sizes['num_edge_labels']
+        return self.sizes["num_edge_labels"]
 
     @property
     def num_edge_attributes(self) -> int:
-        return self.sizes['num_edge_attributes']
+        return self.sizes["num_edge_attributes"]
 
     @property
     def raw_file_names(self) -> List[str]:
-        names = ['A', 'graph_indicator']
-        return [f'{self.name}_{name}.txt' for name in names]
+        names = ["A", "graph_indicator"]
+        return [f"{self.name}_{name}.txt" for name in names]
 
     @property
     def processed_file_names(self) -> str:
-        return 'data.pt'
+        return "data.pt"
 
     # def download(self) -> None:
     #     url = self.cleaned_url if self.cleaned else self.url
@@ -222,58 +225,62 @@ class Dataset(InMemoryDataset):
         )
 
     def __repr__(self) -> str:
-        return f'{self.name}({len(self)})'
+        return f"{self.name}({len(self)})"
+
 
 def save_dataset_as_graphs(location, dataset_path, dataset_name):
-    dataset = eval("datasets."+location)(dataset_path, name=dataset_name)
-    folder_path = os.path.join(dataset_path, dataset_name,"graphs")
+    dataset = eval("datasets." + location)(dataset_path, name=dataset_name)
+    folder_path = os.path.join(dataset_path, dataset_name, "graphs")
     os.makedirs(folder_path, exist_ok=True)
     for i in range(len(dataset)):
-        path = os.path.join(folder_path,"graph_"+str(i)+".pickle")
-        with open(path, 'wb') as handle:
+        path = os.path.join(folder_path, "graph_" + str(i) + ".pickle")
+        with open(path, "wb") as handle:
             pickle.dump(dict(dataset[i]), handle)
 
+
 def create_dataset(dataset_path, dataset_name):
-    folder_path = os.path.join(dataset_path, dataset_name,"graphs")
+    folder_path = os.path.join(dataset_path, dataset_name, "graphs")
     n = len(os.listdir(folder_path))
-    edge_index_nbs = torch.zeros(n+1).to(torch.int)
+    edge_index_nbs = torch.zeros(n + 1).to(torch.int)
     # edge_attr_nbs = torch.zeros(n+1).to(torch.int)
-    node_nbs = torch.zeros(n+1).to(torch.int)
-    y = torch.zeros(n+1).to(torch.int)
+    node_nbs = torch.zeros(n + 1).to(torch.int)
+    y = torch.zeros(n + 1).to(torch.int)
     for i in range(n):
-        path = os.path.join(folder_path,"graph_"+str(i)+".pickle")
-        with open(path, 'rb') as handle:
+        path = os.path.join(folder_path, "graph_" + str(i) + ".pickle")
+        with open(path, "rb") as handle:
             data_point = pickle.load(handle)
-        
+
         if i == 0:
             dic_graphs = dict()
-            dic_graphs['x'] = data_point['x']
-            dic_graphs['edge_index'] = data_point['edge_index']
-            dic_graphs['y'] = data_point['y']
+            dic_graphs["x"] = data_point["x"]
+            dic_graphs["edge_index"] = data_point["edge_index"]
+            dic_graphs["y"] = data_point["y"]
 
         else:
-            dic_graphs['x'] = torch.cat((dic_graphs['x'], data_point['x']), 0)
-            dic_graphs['edge_index'] = torch.cat((dic_graphs['edge_index'], data_point['edge_index']), 1)
-            # dic_graphs['edge_attr'] = torch.cat((dic_graphs['edge_attr'], data_point['edge_attr']), 0)
-            dic_graphs['y'] = torch.cat((dic_graphs['y'], data_point['y']))
+            dic_graphs["x"] = torch.cat((dic_graphs["x"], data_point["x"]), 0)
+            dic_graphs["edge_index"] = torch.cat(
+                (dic_graphs["edge_index"], data_point["edge_index"]), 1
+            )
+            dic_graphs["y"] = torch.cat((dic_graphs["y"], data_point["y"]))
 
-        edge_index_nbs[i+1] = edge_index_nbs[i] + data_point["edge_index"].shape[1]
-        # edge_attr_nbs[i+1] = edge_attr_nbs[i] + data_point["edge_attr"].shape[1]
-        node_nbs[i+1] = node_nbs[i] + data_point["x"].shape[0]
-        y[i+1] = y[i] + 1
+        edge_index_nbs[i + 1] = (
+            edge_index_nbs[i] + data_point["edge_index"].shape[1]
+        )
+        node_nbs[i + 1] = node_nbs[i] + data_point["x"].shape[0]
+        y[i + 1] = y[i] + 1
 
     dic_index_info = {
-        'x':node_nbs,
-        'edge_index':edge_index_nbs,
-        # 'edge_attr':edge_attr_nbs,
-        'y':y
+        "x": node_nbs,
+        "edge_index": edge_index_nbs,
+        "y": y,
     }
 
     dic_general_info = {
-        "num_node_labels" : dic_graphs['x'].shape[1],
-        # "num_edge_labels" : dic_graphs['edge_attr'].shape[1],
-        "num_node_attributes" : 0,
-        # "num_edge_attributes" : 0
+        "num_node_labels": dic_graphs["x"].shape[1],
+        "num_node_attributes": 0,
     }
 
-    torch.save((dic_graphs, dic_index_info, dic_general_info, Data), os.path.join(dataset_path, dataset_name,"processed/data.pt"))
+    torch.save(
+        (dic_graphs, dic_index_info, dic_general_info, Data),
+        os.path.join(dataset_path, dataset_name, "processed/data.pt"),
+    )
