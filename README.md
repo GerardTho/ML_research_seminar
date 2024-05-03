@@ -23,6 +23,8 @@ If you are not using an ssp cloud service, you might need to add your credential
 ## Environment
 
 ```
+conda create -n gnn python=3.11
+conda deactivate
 pip install -r requirements.txt
 ```
 
