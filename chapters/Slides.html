@@ -333,6 +333,27 @@
 </section>
 <section id="why-considering-graphs" class="slide level2">
 <h2>Why Considering Graphs?</h2>
+<style>
+.return-home-button {
+  position: fixed;
+  top: 1px;
+  right: -30px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 18px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.return-home-button:hover {
+  background-color: #555;
+}
+</style>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <div style="text-align: center">
 <p><img src="../images/GNN.png" alt="Context_GNN" width="80%"></p>
 </div>
@@ -345,6 +366,9 @@ Source: Lin et al., 2021
 </section>
 <section id="the-notion-of-homophily" class="slide level2">
 <h2>The Notion of Homophily</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <div style="text-align: center">
 <p><img src="../images/homophily.png" alt="Illustration of the homophily" width="80%"></p>
 </div>
@@ -357,6 +381,9 @@ Source: [Zheng2022GraphNN]
 </section>
 <section id="generic-architecture" class="slide level2">
 <h2>Generic Architecture</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <div class="centered">
 <p><img src="../images/standard_archi.png" alt="Generic Framework of a GNN" width="90%"></p>
 </div>
@@ -372,6 +399,9 @@ Source: [Zheng2022GraphNN]
 </section>
 <section id="graph-convolutional-network" class="slide level2">
 <h2>Graph Convolutional Network</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>
 Convolutional filters, similar to CNNs, passed on the graph nodes to update them with respect to their neighbors’s features. Definition:
 </p>
@@ -390,6 +420,9 @@ Convolutional filters, similar to CNNs, passed on the graph nodes to update them
 </section>
 <section id="graph-attention-networks" class="slide level2">
 <h2>Graph Attention Networks</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>
 Aggregating features from its neighbors, weighted by attention coefficients. Definition:
 </p>
@@ -397,6 +430,9 @@ Aggregating features from its neighbors, weighted by attention coefficients. Def
 </section>
 <section id="graph-isomorphism-network-convolution" class="slide level2">
 <h2>Graph Isomorphism Network Convolution</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>
 Maximize the representational/discriminative power of a GNN. Definition:
 </p>
@@ -407,6 +443,9 @@ Maximize the representational/discriminative power of a GNN. Definition:
 </section>
 <section id="top-k-pooling-operator" class="slide level2">
 <h2>Top-K pooling operator</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>Top-K Pooling retains only the top-K nodes with the highest scores.</p>
 <div style="text-align: center">
 <p><img src="../images/topKPooling.png" alt="Top-K pooling operator" width="80%"></p>
@@ -414,6 +453,9 @@ Maximize the representational/discriminative power of a GNN. Definition:
 </section>
 <section id="self-attention-graph-pooling" class="slide level2">
 <h2>Self-Attention Graph Pooling</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>Top-K Pooling with attention scores.</p>
 <div style="text-align: center">
 <p><img src="../images/SagPool2.png" alt="Self-Attention Graph Pooling" width="80%"></p>
@@ -421,6 +463,9 @@ Maximize the representational/discriminative power of a GNN. Definition:
 </section>
 <section id="mewis-pool-maximum-entropy-weighted-independent-set-pooling" class="slide level2">
 <h2>MEWIS Pool (Maximum Entropy Weighted Independent Set Pooling)</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>Maximizing the <strong>Shannon Entropy</strong></p>
 <div style="text-align: center">
 <p><img src="../images/MEWIS.png" alt="MEWIS Pool" width="80%"></p>
@@ -428,12 +473,18 @@ Maximize the representational/discriminative power of a GNN. Definition:
 </section>
 <section id="edge-pooling" class="slide level2">
 <h2>EDGE pooling</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>Pairing nodes based on scores.</p>
 <div style="text-align: center">
 <p><img src="../images/EDGE.png" alt="EDGE pooling" width="80%"></p>
 </div></section>
 <section id="our-datasets" class="slide level2">
 <h2>Our datasets</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <style>
 table, th, td {
   font-size: 35px;
@@ -538,6 +589,9 @@ Some graphs from MUTAG dataset (Source: <a href="https://doi.org/10.1016/j.patco
 </section>
 <section id="mean-vs-max-readout" class="slide level2">
 <h2>Mean vs Max Readout</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>Test the differences with <strong>Wilcoxon tests</strong>.</p>
 <style>
 table, th, td {
@@ -606,28 +660,43 @@ GINConv_EDGE_mean
 </tbody>
 </table>
 <p><strong>Result</strong></p>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <p>Since p-value &gt; 0.05, the results are <strong>equivalent</strong> between mean and max readout. <span class="math inline">\(\hookrightarrow\)</span> We will only keep the global max pooling</p>
 </section>
 <section id="test-accuracy-vs-number-of-parameters-on-mutag" class="slide level2">
 <h2>Test accuracy vs Number of parameters on MUTAG</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <div class="centered">
 <p><img src="../images/pairplot-nb_parameters-mean_accuracy.png" alt="Test accuracy vs Train time on MUTAG" width="100%"></p>
 </div>
 </section>
 <section id="test-accuracy-vs-train-time-on-mutag" class="slide level2">
-<h2>Test accuracy vs Train time on MUTAG</h2>
+<h2>Test accuracy vs Train <br> time on MUTAG</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <div class="centered">
 <p><img src="../images/pairplot-Training time-mean_accuracy.png" alt="Test accuracy vs Train time on MUTAG" width="100%"></p>
 </div>
 </section>
 <section id="test-accuracy-vs-homophily" class="slide level2">
 <h2>Test accuracy vs Homophily</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <div style="text-align: center">
 <p><img src="../images/pairplot-homophily-mean_accuracy.png" alt="Test accuracy vs Homophily" width="100%"></p>
 </div>
 </section>
 <section id="results-by-pooling" class="slide level2">
 <h2>Results by pooling</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
 <style>
 table, th, td {
   border: 1px solid black;
@@ -1020,6 +1089,152 @@ GIN
 </tr>
 </tbody>
 </table>
+</section>
+<section id="results-by-architecture" class="slide level2">
+<h2>Results by architecture</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>ENZYMES</th>
+<th>MUTAG</th>
+<th>NCI1</th>
+<th>PROTEINS</th>
+<th>Total Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GAT</td>
+<td>MEWIS</td>
+<td><span class="math inline">\(0.295  \pm0.040\)</span></td>
+<td><span class="math inline">\(0.742  \pm0.086\)</span></td>
+<td><span class="math inline">\(0.693  \pm0.008\)</span></td>
+<td><span class="math inline">\(0.722  \pm0.022\)</span></td>
+<td>3225</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>None</td>
+<td><span class="math inline">\(0.310  \pm0.053\)</span></td>
+<td><span class="math inline">\(0.679  \pm0.087\)</span></td>
+<td><span class="math inline">\(0.659  \pm0.023\)</span></td>
+<td><span class="math inline">\(0.734  \pm0.027\)</span></td>
+<td>90</td>
+</tr>
+<tr class="odd">
+<td>GCN</td>
+<td>EDGE</td>
+<td><span class="math inline">\(0.294   \pm0.026\)</span></td>
+<td><span class="math inline">\(0.703  \pm0.081\)</span></td>
+<td><span class="math inline">\(0.717  \pm0.015\)</span></td>
+<td><strong><span class="math inline">\(0.753    \pm0.024\)</span></strong></td>
+<td>1327</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>None</td>
+<td><span class="math inline">\(0.316  \pm0.044\)</span></td>
+<td><span class="math inline">\(0.703  \pm0.065\)</span></td>
+<td><span class="math inline">\(0.651  \pm0.015\)</span></td>
+<td><span class="math inline">\(0.743  \pm0.029\)</span></td>
+<td>40</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>TOPK</td>
+<td><span class="math inline">\(0.176  \pm0.035\)</span></td>
+<td><span class="math inline">\(0.739  \pm0.075\)</span></td>
+<td><span class="math inline">\(0.631  \pm0.034\)</span></td>
+<td><span class="math inline">\(0.694  \pm0.032\)</span></td>
+<td>55</td>
+</tr>
+<tr class="even">
+<td>GIN</td>
+<td>EDGE</td>
+<td><strong><span class="math inline">\(0.353 \pm0.039\)</span></strong></td>
+<td><strong><span class="math inline">\(0.847  \pm0.063\)</span></strong></td>
+<td><span class="math inline">\(0.735    \pm0.010\)</span></td>
+<td><span class="math inline">\(0.731  \pm0.017\)</span></td>
+<td>1156</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>MEWIS</td>
+<td><span class="math inline">\(0.309 \pm0.055\)</span></td>
+<td><span class="math inline">\(0.789  \pm0.077\)</span></td>
+<td><strong><span class="math inline">\(0.744    \pm0.006\)</span></strong></td>
+<td><span class="math inline">\(0.743    \pm0.016\)</span></td>
+<td>4365</td>
+</tr>
+</tbody>
+</table>
+<p>Best pooling per architecture :</p>
+<table>
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>ENZYMES</th>
+<th>MUTAG</th>
+<th>NCI1</th>
+<th>PROTEINS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GAT</td>
+<td>None</td>
+<td>MEWIS</td>
+<td>MEWIS</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td>GCN</td>
+<td>None</td>
+<td>TOPK</td>
+<td>EDGE</td>
+<td><strong>EDGE</strong></td>
+</tr>
+<tr class="odd">
+<td>GIN</td>
+<td><strong>EDGE</strong></td>
+<td><strong>EDGE</strong></td>
+<td><strong>MEWIS</strong></td>
+<td>MEWIS</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="conclusion" class="slide level2">
+<h2>Conclusion</h2>
+<div class="return-home-button">
+<p><a href="../index.html">Return to Homepage</a></p>
+</div>
+<p>Key idea</p>
+<ul>
+<li>GNN/CNN : convolution / pooling</li>
+<li>Best pairing : GINConv - Edge / Mewis pool</li>
+<li>Attention : dataset / architecture</li>
+</ul>
+<p>Work to be done</p>
+<ul>
+<li>Bigger datasets</li>
+<li>Tuning the architecture</li>
+<li>Other methods</li>
+</ul>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">

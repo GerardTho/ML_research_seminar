@@ -120,7 +120,14 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#key-ideas" id="toc-key-ideas" class="nav-link active" data-scroll-target="#key-ideas">Key Ideas</a></li>
+  <li><a href="#work-to-be-done" id="toc-work-to-be-done" class="nav-link" data-scroll-target="#work-to-be-done">Work to be Done</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -128,8 +135,27 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<p>In this project, we explored the use of graph neural networks for graph classification tasks. Specifically, we focused on the use of convolutional and pooling layers in GNNs, and we evaluated the performance of different architectures and pooling methods.</p>
+<section id="key-ideas" class="level2">
+<h2 class="anchored" data-anchor-id="key-ideas">Key Ideas</h2>
+<ul>
+<li><p><strong>GNN/CNN: convolution/pooling</strong>: We found that the use of convolutional and pooling layers in GNNs is analogous to their use in convolutional neural networks for image classification tasks. In particular, the convolutional layers are responsible for extracting local features from the graph, while the pooling layers are responsible for aggregating these features to obtain a global representation of the graph.</p></li>
+<li><p><strong>Best pairing: GINConv - Edge/Mewis pool</strong>: Among the different architectures and pooling methods we evaluated, we found that the combination of GINConv with Edge or Mewis pooling resulted in the best performance for most datasets. This suggests that GINConv is effective at capturing the local structure of the graph, while Edge and Mewis pooling are effective at aggregating the features in a way that preserves the most important information.</p></li>
+<li><p><strong>Attention: dataset/architecture</strong>: We also found that the choice of architecture and pooling method depends on the specific dataset and task at hand. For example, some datasets may require more sophisticated pooling methods to capture complex patterns in the graph, while others may benefit from simpler methods that are less prone to overfitting. Similarly, some architectures may be better suited for certain types of graphs (e.g., graphs with a large number of nodes or edges) than others.</p></li>
+</ul>
+</section>
+<section id="work-to-be-done" class="level2">
+<h2 class="anchored" data-anchor-id="work-to-be-done">Work to be Done</h2>
+<p>While we made significant progress in this project, there are still several avenues for future work:</p>
+<ul>
+<li><p><strong>Bigger datasets</strong>: We evaluated our models on several benchmark datasets, but there is still a need to test them on larger and more diverse datasets to better understand their strengths and limitations.</p></li>
+<li><p><strong>Tuning the architecture</strong>: There are many hyperparameters in GNN architectures (e.g., number of layers, hidden dimensions, activation functions) that can affect their performance. More systematic tuning of these hyperparameters could lead to further improvements in accuracy.</p></li>
+<li><p><strong>Other methods</strong>: There are many other approaches to graph classification besides GNNs, such as graph kernel methods and graph embedding methods. It would be interesting to compare the performance of these methods to GNNs on the same datasets.</p></li>
+</ul>
+<p>In conclusion, this project demonstrated the potential of GNNs for graph classification tasks, and identified several key factors that can affect their performance. We hope that our findings will be useful to other researchers and practitioners working in this area, and we look forward to exploring new directions in this exciting field.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
