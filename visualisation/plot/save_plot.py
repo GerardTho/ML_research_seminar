@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 import os
 
 
-class Plot :
+class Plot:
 
-    def __init__(self, list_dict : List[Dict]) -> None :
+    def __init__(self, list_dict: List[Dict]) -> None:
 
         self.list_dict = list_dict
         self.datasets = set(d["dataset"] for d in list_dict)
@@ -20,13 +20,15 @@ class Plot :
         os.makedirs(directory, exist_ok=True)
         plt.savefig(path)
 
-    def set_sorted_list_dict(self) -> None :
+    def set_sorted_list_dict(self) -> None:
         """
         Sort the list of dictionaries in alphabetical order with respect to
         the architecture, the pooling and the dataset
         """
-        list_dict_architecture_as_key = {
-            f"{d['convolution_layer']}_{d['local_pooling_layer']}_{d['dataset']}": d
+        list_dict_architecture_as_key = {(
+            f"{d['convolution_layer']}"
+            f"_{d['local_pooling_layer']}"
+            f"_{d['dataset']}"): d
             for d in self.list_dict
         }
         list_dict_architecture_as_key = dict(
@@ -34,12 +36,11 @@ class Plot :
         )
         self.sorted_list_dict = list(list_dict_architecture_as_key.values())
 
-
-    def set_worst_best_acc_per_dataset(self) -> None :
+    def set_worst_best_acc_per_dataset(self) -> None:
         """
         Create new attributes corresponding to the best
         and the worst accuracy for each dataset
-        
+
         These attributes are dictionary whose keys are the
         datasets and values are the mean accuracy and the whole
         corresponing dictionary (a tuple)
@@ -68,8 +69,7 @@ class Plot :
         self.worst_accs = worst_accs
         self.best_accs = best_accs
 
- 
-    def plot_losses(self, train : bool = True) -> None :
+    def plot_losses(self, train: bool = True) -> None:
         """
         Plot the losses as a function of the epochs of the train/validation
 
@@ -78,7 +78,7 @@ class Plot :
         kind = "train" if train else "val"
 
         for dic in self.list_dict:
-            
+
             # if the dictionary is valid
             if "split 1" in dic:
 
@@ -94,26 +94,25 @@ class Plot :
                 ax.set_ylabel(f"{kind} loss")
 
                 ax.set_title(
-                    f"{kind} loss across epochs with early stopping \n for " \
-                    f"{dic['dataset']} with {dic['convolution_layer']} and " \
+                    f"{kind} loss across epochs with early stopping \n for "
+                    f"{dic['dataset']} with {dic['convolution_layer']} and "
                     f"{dic['local_pooling_layer']}"
                 )
 
-                    
                 self.save_fig_in_folder(
-                os.path.join("visualisation",
-                            "results",
-                             "losses",
-                             kind, 
-                             f"{dic['dataset']}_{dic['convolution_layer']}_" \
-                             f"{dic['local_pooling_layer']}.png"
+                    os.path.join(
+                        "visualisation",
+                        "results",
+                        "losses",
+                        kind,
+                        f"{dic['dataset']}_{dic['convolution_layer']}_"
+                        f"{dic['local_pooling_layer']}.png",
                     )
                 )
-                
+
                 plt.close()
 
-
-    def plot_acc(self, train : bool = True) -> None :
+    def plot_acc(self, train: bool = True) -> None:
         """
         Plot the losses as a function of the epochs of the train/validation
 
@@ -122,7 +121,7 @@ class Plot :
         kind = "train" if train else "val"
 
         for dic in self.list_dict:
-            
+
             # if the dictionary is valid
             if "split 1" in dic:
 
@@ -130,7 +129,9 @@ class Plot :
                 ax = fig.add_subplot(1, 1, 1)
 
                 ax.plot(
-                    np.arange(len(self.list_dict[0]["split 1"][f"{kind}_accuracies"])),
+                    np.arange(
+                        len(self.list_dict[0]["split 1"][f"{kind}_accuracies"])
+                    ),
                     self.list_dict[0]["split 1"][f"{kind}_accuracies"],
                 )
 
@@ -138,28 +139,27 @@ class Plot :
                 ax.set_ylabel(f"{kind} accuracy")
 
                 ax.set_title(
-                    f"{kind} accuracy across epochs with early stopping \n for " \
-                    f"{dic['dataset']} with {dic['convolution_layer']} and " \
+                    f"{kind} accuracy across epochs \n for "
+                    f"{dic['dataset']} with {dic['convolution_layer']} and "
                     f"{dic['local_pooling_layer']}"
-                    )
-                    
+                )
+
                 self.save_fig_in_folder(
-                os.path.join("visualisation",
-                            "results",
-                             "acc",
-                             kind, 
-                             f"{dic['dataset']}_{dic['convolution_layer']}_" \
-                             f"{dic['local_pooling_layer']}.png"
+                    os.path.join(
+                        "visualisation",
+                        "results",
+                        "acc",
+                        kind,
+                        f"{dic['dataset']}_{dic['convolution_layer']}_"
+                        f"{dic['local_pooling_layer']}.png",
                     )
                 )
-                
+
                 plt.close()
 
-
-    def plot_acc_and_loss(self, train : bool = True) -> None :
-
+    def plot_acc_and_loss(self, train: bool = True) -> None:
         """
-        Plot the losses and the accuracy as a function of 
+        Plot the losses and the accuracy as a function of
         the epochs of the train/validation
 
         train -> if True, plot the train, else plot the validation
@@ -167,7 +167,7 @@ class Plot :
         kind = "train" if train else "val"
 
         for dic in self.list_dict:
-            
+
             # if the dictionary is valid
             if "split 1" in dic:
 
@@ -177,26 +177,29 @@ class Plot :
                 color1 = "tab:blue"
 
                 ax1.plot(
-                    np.arange(len(self.list_dict[0]["split 1"][f"{kind}_accuracies"])),
+                    np.arange(
+                        len(self.list_dict[0]["split 1"][f"{kind}_accuracies"])
+                    ),
                     self.list_dict[0]["split 1"][f"{kind}_accuracies"],
                     color=color1,
-                    label= f"{kind} accuracy"
+                    label=f"{kind} accuracy",
                 )
 
                 ax1.set_xlabel("Epochs")
                 ax1.set_ylabel(f"{kind} accuracy", color=color1)
                 ax1.tick_params(axis="y", labelcolor=color1)
 
-                
                 # Creating a secondary y-axis for the second curve
                 ax2 = ax1.twinx()
                 color2 = "tab:red"
 
                 ax2.plot(
-                    np.arange(len(self.list_dict[0]["split 1"][f"{kind}_losses"])),
+                    np.arange(
+                        len(self.list_dict[0]["split 1"][f"{kind}_losses"])
+                    ),
                     self.list_dict[0]["split 1"][f"{kind}_losses"],
                     color=color2,
-                    label= f"{kind} loss"
+                    label=f"{kind} loss",
                 )
 
                 ax2.set_xlabel("Epochs")
@@ -209,28 +212,29 @@ class Plot :
                 ax1.legend(lines + lines2, labels + labels2, loc="upper left")
 
                 ax1.set_title(
-                    f"{kind} accuracy and loss across epochs with early stopping \n for " \
-                    f"{dic['dataset']} with {dic['convolution_layer']} and " \
+                    f"{kind} accuracy and loss across epochs\n for "
+                    f"{dic['dataset']} with {dic['convolution_layer']} and "
                     f"{dic['local_pooling_layer']}"
-                    )
+                )
 
                 plt.tight_layout()
 
                 self.save_fig_in_folder(
-                os.path.join("visualisation",
-                            "results",
-                             "acc_and_loss",
-                             kind, 
-                             f"{dic['dataset']}_{dic['convolution_layer']}_" \
-                             f"{dic['local_pooling_layer']}.png"
+                    os.path.join(
+                        "visualisation",
+                        "results",
+                        "acc_and_loss",
+                        kind,
+                        f"{dic['dataset']}_{dic['convolution_layer']}_"
+                        f"{dic['local_pooling_layer']}.png",
                     )
                 )
 
                 plt.close()
 
-    def plot_all(self, train : bool = True) -> None :
+    def plot_all(self, train: bool = True) -> None:
         """
-        Plot everything (losses, accuracy, and losses and accuracy) 
+        Plot everything (losses, accuracy, and losses and accuracy)
         as a function of the epochs of the train/validation
 
         train -> if True, plot the train, else plot the validation

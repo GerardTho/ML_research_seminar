@@ -1,3 +1,3 @@
 global_pooling_layer_to_test: ["mean", "max"]
-local_pooling_layers_to_test: []
-convolution_layers_to_test: ["GCN"]
+local_pooling_layers_to_test: ["SAG", "TOPK"]
+convolution_layers_to_test: ["GCN", "GAT", "GINConv"]
