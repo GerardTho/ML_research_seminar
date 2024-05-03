@@ -14,6 +14,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def get_convolution_mapping(list_dict: List[Dict]) -> Tuple[List, Dict, List]:
     """
     For the shape of the points of the following plot functions, we will
@@ -29,9 +30,10 @@ def get_convolution_mapping(list_dict: List[Dict]) -> Tuple[List, Dict, List]:
 
     if len(unique_convolutions) > 41:
         raise Exception(
-            f"Not enough possible values of shape for the convolutions : got {len(convolutions)} but expected 41 at most"
+            f"""Not enough possible values of shape for the convolutions : got
+            {len(convolutions)} but expected 41 at most"""
         )
-    # same as for the colors: creating a mapping of the convolutions to the shapes
+    # creating a mapping of the convolutions to the shapes
 
     existing_shapes = list(markers.MarkerStyle.markers.keys())
     shape_mapping = {}
@@ -75,8 +77,9 @@ def plot_from_dict(
     """
     Plot the graph resulting from the list of dictionary
 
-    figsize -> width and height of the figure (figsize argument matplotlib figure function)
-    **kwargs -> additional keyword arguments passed to matplotlib scatter function
+    figsize -> width and height of the figure
+    (figsize argument matplotlib figure function)
+    **kwargs -> passed to matplotlib scatter function
 
     Raises an error if the desired keys are not present in a dictionary
     """
@@ -123,11 +126,15 @@ def plot_from_dict(
     shape_keys = list(shape_mapping.keys())
     shape_values = list(shape_mapping.values())
     legend_shape = [
-        ax.scatter([], [], color="black", marker=shape_values[i], label=shape_keys[i])
+        ax.scatter(
+            [], [], color="black", marker=shape_values[i], label=shape_keys[i]
+        )
         for i in range(len(shape_keys))
     ]
 
-    for x_value, y_value, z_value, color, shape in zip(x, y, z, colors, shapes):
+    for x_value, y_value, z_value, color, shape in zip(
+        x, y, z, colors, shapes
+    ):
         ax.scatter(
             x_value,
             y_value,
@@ -195,9 +202,9 @@ def pairplot_from_dict(
 
     plot -> what kind of plot : if True, a plot, else a scatter
 
-    **kwargs1 -> additional keyword arguments passed to matplotlib scatter function
-    **kwargs2 -> additional keyword arguments passed to matplotlib legend function
-    **kwargs2 -> additional keyword arguments passed to matplotlib plot function (if plot)
+    **kwargs1 -> passed to matplotlib scatter function
+    **kwargs2 -> passed to matplotlib legend function
+    **kwargs2 -> passed to matplotlib plot function (if plot)
 
     Raises error if some elements of the rows don't correspond to key values in list_dict,
     or if the number of elements of rows_to_plot don't fit the dimension of dim_grid_subplots
@@ -253,12 +260,18 @@ def pairplot_from_dict(
     for ax, (key1, key2) in zip(axs, rows_to_plot):
 
         legend_color = [
-            mpatches.Patch(color=color_values[i], label=f"{colors_keys[i]}-pool")
+            mpatches.Patch(
+                color=color_values[i], label=f"{colors_keys[i]}-pool"
+            )
             for i in range(len(colors_keys))
         ]
         legend_shape = [
             ax.scatter(
-                [], [], color="black", marker=shape_values[i], label=shape_keys[i]
+                [],
+                [],
+                color="black",
+                marker=shape_values[i],
+                label=shape_keys[i],
             )
             for i in range(len(shape_keys))
         ]
@@ -266,7 +279,9 @@ def pairplot_from_dict(
         x_values = [dic[key1] for dic in list_dict]
         y_values = [dic[key2] for dic in list_dict]
 
-        for x_value, y_value, color, shape in zip(x_values, y_values, colors, shapes):
+        for x_value, y_value, color, shape in zip(
+            x_values, y_values, colors, shapes
+        ):
             ax.scatter(
                 x_value,
                 y_value,
@@ -308,6 +323,7 @@ def pairplot_from_dict(
     plt.show()
 
     return
+
 
 def to_table(list_dict: List[Dict], per_dataset=False) -> pd.DataFrame:
     """
@@ -366,7 +382,7 @@ def to_table(list_dict: List[Dict], per_dataset=False) -> pd.DataFrame:
 
     df = pd.DataFrame(dic_results)
 
-    df = df[df["dataset"]!="NCI1"]
+    df = df[df["dataset"] != "NCI1"]
 
     df["local_pooling_layer"] = df["local_pooling_layer"].astype(str)
     indexes_to_bold = df.groupby("dataset")["mean_accuracy"].idxmax()
@@ -379,9 +395,13 @@ def to_table(list_dict: List[Dict], per_dataset=False) -> pd.DataFrame:
     )
     df.loc[indexes_to_bold, "accuracy"] = (
         "$\\bm{"
-        + df.loc[indexes_to_bold, "mean_accuracy"].apply("{:.3f}".format).astype(str)
+        + df.loc[indexes_to_bold, "mean_accuracy"]
+        .apply("{:.3f}".format)
+        .astype(str)
         + "\pm"
-        + df.loc[indexes_to_bold, "std_accuracy"].apply("{:.3f}".format).astype(str)
+        + df.loc[indexes_to_bold, "std_accuracy"]
+        .apply("{:.3f}".format)
+        .astype(str)
         + "}$"
     )
     df = df.rename(
@@ -399,33 +419,70 @@ def to_table(list_dict: List[Dict], per_dataset=False) -> pd.DataFrame:
         values=["accuracy", "training_time", "mean_accuracy"],
     )
 
-
-    df_ranking = df["mean_accuracy"].rank(ascending=False)#.groupby(["Conv", "Local"], group_keys=True)[datasets].mean()
-    conv_map = df.reset_index(level=[0,1,2])["Conv"].to_dict()
-    pool_map = df.reset_index(level=[0,1,2])["Local"].to_dict()
-    average_ranking_df_archi = df_ranking.reset_index(level=[0]).groupby(["Conv"])[datasets].mean().astype(int)
-    average_ranking_df_pooling = df_ranking.reset_index(level=[1]).groupby(["Local"])[datasets].mean().astype(int)
+    df_ranking = df["mean_accuracy"].rank(
+        ascending=False
+    )  # .groupby(["Conv", "Local"], group_keys=True)[datasets].mean()
+    conv_map = df.reset_index(level=[0, 1, 2])["Conv"].to_dict()
+    pool_map = df.reset_index(level=[0, 1, 2])["Local"].to_dict()
+    average_ranking_df_archi = (
+        df_ranking.reset_index(level=[0])
+        .groupby(["Conv"])[datasets]
+        .mean()
+        .astype(int)
+    )
+    average_ranking_df_pooling = (
+        df_ranking.reset_index(level=[1])
+        .groupby(["Local"])[datasets]
+        .mean()
+        .astype(int)
+    )
 
     if per_dataset:
-        aggregator = lambda x:x
+        aggregator = lambda x: x
         aggregated_columns = datasets
     else:
-        aggregator = lambda x:x.mean(axis=1)
+        aggregator = lambda x: x.mean(axis=1)
         aggregated_columns = 0
-        
-    df_best_pooling = aggregator(df_ranking).reset_index(level=[0,1,2]).groupby(["Conv"]).idxmin()[aggregated_columns].copy()
-    df_best_architecture = aggregator(df_ranking).reset_index(level=[0,1,2]).groupby(["Local"]).idxmin()[aggregated_columns].copy()
+
+    df_best_pooling = (
+        aggregator(df_ranking)
+        .reset_index(level=[0, 1, 2])
+        .groupby(["Conv"])
+        .idxmin()[aggregated_columns]
+        .copy()
+    )
+    df_best_architecture = (
+        aggregator(df_ranking)
+        .reset_index(level=[0, 1, 2])
+        .groupby(["Local"])
+        .idxmin()[aggregated_columns]
+        .copy()
+    )
     best_indexes_by_architecture = list(set(df_best_pooling.values.flatten()))
     best_indexes_by_pooling = list(set(df_best_architecture.values.flatten()))
-    df_best_pooling =  df_best_pooling.map(lambda x:pool_map[x])
-    df_best_architecture =  df_best_architecture.map(lambda x:conv_map[x])
+    df_best_pooling = df_best_pooling.map(lambda x: pool_map[x])
+    df_best_architecture = df_best_architecture.map(lambda x: conv_map[x])
 
-    df_worst_pooling = aggregator(df_ranking).reset_index(level=[0,1,2]).groupby(["Conv"]).idxmax()[aggregated_columns].copy()
-    df_worst_architecture = aggregator(df_ranking).reset_index(level=[0,1,2]).groupby(["Local"]).idxmax()[aggregated_columns].copy()
-    df_worst_pooling =  df_worst_pooling.map(lambda x:pool_map[x])
-    df_worst_architecture =  df_worst_architecture.map(lambda x:conv_map[x])
+    df_worst_pooling = (
+        aggregator(df_ranking)
+        .reset_index(level=[0, 1, 2])
+        .groupby(["Conv"])
+        .idxmax()[aggregated_columns]
+        .copy()
+    )
+    df_worst_architecture = (
+        aggregator(df_ranking)
+        .reset_index(level=[0, 1, 2])
+        .groupby(["Local"])
+        .idxmax()[aggregated_columns]
+        .copy()
+    )
+    df_worst_pooling = df_worst_pooling.map(lambda x: pool_map[x])
+    df_worst_architecture = df_worst_architecture.map(lambda x: conv_map[x])
 
-    training_time = df["training_time"].sum(axis=1).copy().astype(int).astype(str)
+    training_time = (
+        df["training_time"].sum(axis=1).copy().astype(int).astype(str)
+    )
     df = df.drop(columns=["training_time", "mean_accuracy"])
     df.columns = df.columns.droplevel(0)
     df = df.rename_axis(None, axis=1)
@@ -433,10 +490,23 @@ def to_table(list_dict: List[Dict], per_dataset=False) -> pd.DataFrame:
 
     df_by_architecture = df.iloc[best_indexes_by_architecture].copy()
     df_by_pooling = df.iloc[best_indexes_by_pooling].copy()
-    
-    return df, df_best_architecture, df_worst_architecture, average_ranking_df_archi, df_by_architecture, df_best_pooling, df_worst_pooling, average_ranking_df_pooling, df_by_pooling.reorder_levels([1,2,0]).sort_index()
 
-def get_mean_tuple_list(tuple_list: List[Tuple[float, str]]) -> List[Tuple[float, str]]:
+    return (
+        df,
+        df_best_architecture,
+        df_worst_architecture,
+        average_ranking_df_archi,
+        df_by_architecture,
+        df_best_pooling,
+        df_worst_pooling,
+        average_ranking_df_pooling,
+        df_by_pooling.reorder_levels([1, 2, 0]).sort_index(),
+    )
+
+
+def get_mean_tuple_list(
+    tuple_list: List[Tuple[float, str]]
+) -> List[Tuple[float, str]]:
     """
     For a list of tuple, returns a dictionary with the unique values of str
     as keys and the mean of values as values
@@ -511,7 +581,9 @@ def plot_bar_dataset(
                 # For the moment, mean_accuracies is a dictionary where each value
                 # is the tuple of the mean accuracy and the str corresponding to the
                 # stack variable
-                mean_accuracies[e].append((record["mean_accuracy"], record[stack]))
+                mean_accuracies[e].append(
+                    (record["mean_accuracy"], record[stack])
+                )
 
         if stack is None:
             # the list of the mean accuracy for each groupby variable
@@ -608,16 +680,19 @@ def plot_bar_dataset(
         bbox_inches = bbox.transformed(plt.gcf().dpi_scale_trans.inverted())
 
         # Save the subplot using the bounding box
-        plt.savefig(f"./visualisation/results/barplot/barplot-groupby_{groupby}"
-                    f"-stack_{stack}-dataset_{dataset}.png", bbox_inches=bbox_inches)
+        plt.savefig(
+            f"./visualisation/results/barplot/barplot-groupby_{groupby}"
+            f"-stack_{stack}-dataset_{dataset}.png",
+            bbox_inches=bbox_inches,
+        )
 
     # Adjust the spacing after creating subplots
     plt.tight_layout()
     plt.subplots_adjust(hspace=0.5)
     plt.savefig(
-            f"./visualisation/results/barplot/barplot-groupby_{groupby}"
-            f"-stack_{stack}-aggregate.png"
-            )
+        f"./visualisation/results/barplot/barplot-groupby_{groupby}"
+        f"-stack_{stack}-aggregate.png"
+    )
 
     plt.show()
 
@@ -736,14 +811,18 @@ def plot_acc_parameters(list_dict):
 
     list_dict = sort_list_dict(list_dict)
     datasets = set(d["dataset"] for d in list_dict)
-    worst_acc_per_dataset, best_acc_per_dataset = get_worst_best_acc_per_dataset(
-        list_dict, datasets
+    worst_acc_per_dataset, best_acc_per_dataset = (
+        get_worst_best_acc_per_dataset(list_dict, datasets)
     )
 
     for dataset in datasets:
         plt.figure(figsize=(8, 6))
-        colors = plt.cm.hsv(np.linspace(0, 1, 100))  # Define 15 different colors
-        color_map = plt.cm.colors.ListedColormap(colors)  # Create a custom colormap
+        colors = plt.cm.hsv(
+            np.linspace(0, 1, 100)
+        )  # Define 15 different colors
+        color_map = plt.cm.colors.ListedColormap(
+            colors
+        )  # Create a custom colormap
         nb_parameters = []
         mean_accuracy = []
         labels = set()
@@ -756,8 +835,13 @@ def plot_acc_parameters(list_dict):
 
         sorted_labels = sorted(labels)  # Sort labels alphabetically
 
-        colors = [color_map(i / len(sorted_labels)) for i in range(len(sorted_labels))]
-        label_color_dict = {label: color for label, color in zip(sorted_labels, colors)}
+        colors = [
+            color_map(i / len(sorted_labels))
+            for i in range(len(sorted_labels))
+        ]
+        label_color_dict = {
+            label: color for label, color in zip(sorted_labels, colors)
+        }
 
         for split in list_dict:
             if split.get("dataset") == dataset:
@@ -771,7 +855,11 @@ def plot_acc_parameters(list_dict):
                     label=label if label in sorted_labels else None,
                     color=color,
                     alpha=0.6,
-                    marker="^" if split.get("global_pooling_layer") == "mean" else "o",
+                    marker=(
+                        "^"
+                        if split.get("global_pooling_layer") == "mean"
+                        else "o"
+                    ),
                 )
                 # check if this corresponds to the best/worst architecture
                 if split == best_acc_per_dataset[dataset][1]:
@@ -801,7 +889,8 @@ def plot_acc_parameters(list_dict):
             prop={"size": 10},
         )
         plt.savefig(
-            f"./visualisation/results/acc_parameters/{dataset}.png", bbox_inches="tight"
+            f"./visualisation/results/acc_parameters/{dataset}.png",
+            bbox_inches="tight",
         )
         plt.close()
 
@@ -819,13 +908,17 @@ def plot_acc_time_epoch(
 
     list_dict = sort_list_dict(list_dict)
     datasets = set(d["dataset"] for d in list_dict)
-    worst_acc_per_dataset, best_acc_per_dataset = get_worst_best_acc_per_dataset(
-        list_dict, datasets
+    worst_acc_per_dataset, best_acc_per_dataset = (
+        get_worst_best_acc_per_dataset(list_dict, datasets)
     )
     for dataset in datasets:
         plt.figure(figsize=(8, 6))
-        colors = plt.cm.hsv(np.linspace(0, 1, 100))  # Define 15 different colors
-        color_map = plt.cm.colors.ListedColormap(colors)  # Create a custom colormap
+        colors = plt.cm.hsv(
+            np.linspace(0, 1, 100)
+        )  # Define 15 different colors
+        color_map = plt.cm.colors.ListedColormap(
+            colors
+        )  # Create a custom colormap
         train_time_per_epoch = []
         mean_accuracy = []
         labels = set()
@@ -841,8 +934,13 @@ def plot_acc_time_epoch(
 
         sorted_labels = sorted(labels)  # Sort labels alphabetically
 
-        colors = [color_map(i / len(sorted_labels)) for i in range(len(sorted_labels))]
-        label_color_dict = {label: color for label, color in zip(sorted_labels, colors)}
+        colors = [
+            color_map(i / len(sorted_labels))
+            for i in range(len(sorted_labels))
+        ]
+        label_color_dict = {
+            label: color for label, color in zip(sorted_labels, colors)
+        }
 
         for split in list_dict:
             if "split 1" in split:
@@ -865,7 +963,9 @@ def plot_acc_time_epoch(
                         color=color,
                         alpha=0.6,
                         marker=(
-                            "^" if split.get("global_pooling_layer") == "mean" else "o"
+                            "^"
+                            if split.get("global_pooling_layer") == "mean"
+                            else "o"
                         ),
                     )
                     # check if this corresponds to the best architecture
@@ -896,7 +996,8 @@ def plot_acc_time_epoch(
             prop={"size": 10},
         )
         plt.savefig(
-            f"./visualisation/results/{save_dir}/{dataset}.png", bbox_inches="tight"
+            f"./visualisation/results/{save_dir}/{dataset}.png",
+            bbox_inches="tight",
         )
         plt.close()
 
