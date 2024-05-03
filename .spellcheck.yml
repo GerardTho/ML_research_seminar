@@ -16,4 +16,5 @@ matrix:
   sources:
   - '*.md'
   - '*.qmd'
+  - 'chapters/*.qmd'
   default_encoding: utf-8
