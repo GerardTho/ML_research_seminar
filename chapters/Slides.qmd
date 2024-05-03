@@ -10,6 +10,31 @@ controls: true
 
 ## Why Considering Graphs?
 
+```{=html}
+<style>
+.return-home-button {
+  position: fixed;
+  top: 1px;
+  right: -30px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 18px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.return-home-button:hover {
+  background-color: #555;
+}
+</style>
+```
+
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 <div style="text-align: center">
 <img src="../images/GNN.png" alt="Context_GNN" width="80%" />
 </div>
@@ -20,6 +45,10 @@ controls: true
 
 ## The Notion of Homophily
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 <div style="text-align: center">
 <img src="../images/homophily.png" alt="Illustration of the homophily" width="80%" />
 </div>
@@ -28,7 +57,12 @@ controls: true
 
 <p style="margin-left: 0.5cm">$\hookrightarrow$ Homophily characterizes the extent to which a node's features resemble those of its neighbors.</p>
 
+
 ## Generic Architecture
+
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
 
 <div class="centered">
   <img src="../images/standard_archi.png" alt="Generic Framework of a GNN" width="90%" />
@@ -48,6 +82,10 @@ controls: true
 
 ## Graph Convolutional Network
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 <p>Convolutional filters, similar to CNNs, passed on the graph nodes to update them with respect to their neighbors's features. Definition: </p>
 
 $$h_i' = \sigma \left( \sum_{j \in \mathcal{N}_i} \frac{1}{\sqrt{|\mathcal{N}_i| |\mathcal{N}_j|}} W h_j \right)$$
@@ -59,6 +97,10 @@ $$h_i' = \sigma \left( \sum_{j \in \mathcal{N}_i} \frac{1}{\sqrt{|\mathcal{N}_i|
 
 ## Graph Attention Networks
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 <p>Aggregating features from its neighbors, weighted by attention coefficients. Definition:</p>
 
 $$h'_i = \sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij} \mathbf{W}h_j\right)$$
@@ -66,6 +108,10 @@ $\alpha_{ij}$ : attention coefficient indicating the importance of node $j$'s fe
 $$\alpha_{ij} = \frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_j]\right)\right)}{\sum_{k \in \mathcal{N}_i} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}h_i \| \mathbf{W}h_k]\right)\right)}$$
 
 ## Graph Isomorphism Network Convolution
+
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
 
 <p>Maximize the representational/discriminative power of a GNN. Definition:</p>
 
@@ -77,6 +123,10 @@ $\epsilon$ : learnable parameter or a fixed scalar
 
 ## Top-K pooling operator
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 Top-K Pooling retains only the top-K nodes with the highest scores.
 
 <div style="text-align: center">
@@ -84,6 +134,10 @@ Top-K Pooling retains only the top-K nodes with the highest scores.
 </div>
 
 ## Self-Attention Graph Pooling
+
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
 
 Top-K Pooling with attention scores.
 
@@ -93,6 +147,10 @@ Top-K Pooling with attention scores.
 
 ## MEWIS Pool (Maximum Entropy Weighted Independent Set Pooling)
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 Maximizing the **Shannon Entropy**
 
 <div style="text-align: center">
@@ -101,12 +159,20 @@ Maximizing the **Shannon Entropy**
 
 ## EDGE pooling
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 Pairing nodes based on scores.
 
 <div style="text-align: center">
 <img src="../images/EDGE.png" alt="EDGE pooling" width="80%" />
 
 ## Our datasets
+
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
 
 <style>
 table, th, td {
@@ -163,6 +229,10 @@ table, th, td {
 
 ## Mean vs Max Readout
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 Test the differences with **Wilcoxon tests**.
 
 <style>
@@ -204,16 +274,28 @@ table, th, td {
 
 **Result**
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 Since p-value > 0.05, the results are **equivalent** between mean and max readout.
 $\hookrightarrow$ We will only keep the global max pooling
 
 ## Test accuracy vs Number of parameters on MUTAG
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 <div class="centered">
 <img src="../images/pairplot-nb_parameters-mean_accuracy.png" alt="Test accuracy vs Train time on MUTAG" width="100%" />
 </div>
 
-## Test accuracy vs Train time on MUTAG
+## Test accuracy vs Train <br> time on MUTAG
+
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
 
 <div class="centered">
 <img src="../images/pairplot-Training time-mean_accuracy.png" alt="Test accuracy vs Train time on MUTAG" width="100%" />
@@ -221,11 +303,19 @@ $\hookrightarrow$ We will only keep the global max pooling
 
 ## Test accuracy vs Homophily
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 <div style="text-align: center">
   <img src="../images/pairplot-homophily-mean_accuracy.png" alt="Test accuracy vs Homophily" width="100%" />
 </div>
 
 ## Results by pooling
+
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
 
 <style>
 table, th, td {
@@ -408,6 +498,10 @@ th {
 
 ## Results by architecture
 
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
+
 |     |      | ENZYMES | MUTAG | NCI1 | PROTEINS | Total Time |
 | --- | --- | --- | --- | --- | --- | --- |
 | GAT | MEWIS | $0.295	\pm0.040$ | $0.742	\pm0.086$ | $0.693	\pm0.008$ | $0.722	\pm0.022$ | 3225 |
@@ -427,6 +521,10 @@ Best pooling per architecture :
 | GIN | **EDGE** | **EDGE** | **MEWIS** | MEWIS |
 
 ## Conclusion
+
+<div class="return-home-button">
+  <a href="../index.html">Return to Homepage</a>
+</div>
 
 Key idea
 
