@@ -1,0 +1,26 @@
+---
+format: html
+---
+
+In this project, we explored the use of graph neural networks for graph classification tasks. Specifically, we focused on the use of convolutional and pooling layers in GNNs, and we evaluated the performance of different architectures and pooling methods.
+
+## Key Ideas
+
+- **GNN/CNN: convolution/pooling**: We found that the use of convolutional and pooling layers in GNNs is analogous to their use in convolutional neural networks for image classification tasks. In particular, the convolutional layers are responsible for extracting local features from the graph, while the pooling layers are responsible for aggregating these features to obtain a global representation of the graph.
+
+- **Best pairing: GINConv - Edge/Mewis pool**: Among the different architectures and pooling methods we evaluated, we found that the combination of GINConv with Edge or Mewis pooling resulted in the best performance for most datasets. This suggests that GINConv is effective at capturing the local structure of the graph, while Edge and Mewis pooling are effective at aggregating the features in a way that preserves the most important information.
+
+- **Attention: dataset/architecture**: We also found that the choice of architecture and pooling method depends on the specific dataset and task at hand. For example, some datasets may require more sophisticated pooling methods to capture complex patterns in the graph, while others may benefit from simpler methods that are less prone to overfitting. Similarly, some architectures may be better suited for certain types of graphs (e.g., graphs with a large number of nodes or edges) than others.
+
+## Work to be Done
+
+While we made significant progress in this project, there are still several avenues for future work:
+
+- **Bigger datasets**: We evaluated our models on several benchmark datasets, but there is still a need to test them on larger and more diverse datasets to better understand their strengths and limitations.
+
+- **Tuning the architecture**: There are many hyperparameters in GNN architectures (e.g., number of layers, hidden dimensions, activation functions) that can affect their performance. More systematic tuning of these hyperparameters could lead to further improvements in accuracy.
+
+- **Other methods**: There are many other approaches to graph classification besides GNNs, such as graph kernel methods and graph embedding methods. It would be interesting to compare the performance of these methods to GNNs on the same datasets.
+
+
+In conclusion, this project demonstrated the potential of GNNs for graph classification tasks, and identified several key factors that can affect their performance. We hope that our findings will be useful to other researchers and practitioners working in this area, and we look forward to exploring new directions in this exciting field.

@@ -1,1 +1,277 @@
-![Generic architecture of a GNN](../visualisation/results/acc/train/ENZYMES_GCN_None.png)
+---
+title: "Empirical results"
+format: html
+---
+
+In this page, we will present the empirical results of our study on graph neural networks for molecular property prediction. We will first describe the datasets used in our experiments, followed by a comparison of mean vs max readout, an analysis of test accuracy vs number of parameters and train time, and an examination of test accuracy vs homophily. We will then present the results of our experiments with various pooling methods and architectures, and discuss the best architecture per pooling and the best pooling per architecture.
+
+# Our Datasets
+
+We used four datasets for our experiments: MUTAG, PROTEINS, ENZYMES, and NCI1. The table below summarizes the key characteristics of these datasets.
+
+<style>
+table, th, td {
+  font-size: 35px;
+}
+</style>
+
+|   | MUTAG | PROTEINS | ENZYMES | NCI1 |
+|---|---|---|---|---|
+| Number of graphs | 188 | 1113 | 600 | 4110 |
+| Number of classes | 2 | 2 | 6 | 2 |
+| Number of features | 7 | 3 | 3 | 37 |
+| Homophily | 0.721 | 0.657 | 0.667 | 0.631 |
+
+Some examples of graphs from the MUTAG dataset are shown below.
+
+<div class="centered">
+<img src="../images/MUTAG_dataset.jpg" alt="Some graphs from MUTAG dataset" width="80%" />
+<p class="caption">Some graphs from MUTAG dataset (Source: <a href="https://doi.org/10.1016/j.patcog.2022.108356">bui2022ingrex</a>)</p>
+</div>
+
+# Mean vs Max Readout
+
+We compared the performance of mean and max readout functions for GNNs using Wilcoxon tests. The table below shows the p-value, mean difference, and best architecture for each dataset.
+
+<style>
+table, th, td {
+  font-size: 35px;
+}
+</style>
+
+|   | p-value | Mean difference | Best architecture |
+|---|---|---|---|
+| MUTAG | 0.258 | -0.008 | GINConv_EDGE_max |
+| PROTEINS | 0.33 | 0.009 | GCN_EDGE_max |
+| ENZYMES | 0.207 | -0.01 | GINConv_EDGE_mean |
+
+Since the p-values are greater than 0.05, we conclude that the results are equivalent between mean and max readout. Therefore, we decided to use only the global max pooling in our experiments.
+
+# Test Accuracy vs Number of Parameters on MUTAG
+
+The plot below shows the test accuracy vs. the number of parameters for various GNN architectures on the MUTAG dataset.
+
+<div class="centered">
+<img src="../images/pairplot-nb_parameters-mean_accuracy.png" alt="Test accuracy vs Train time on MUTAG" width="100%" />
+</div>
+
+# Test Accuracy vs Train Time on MUTAG
+
+The plot below shows the test accuracy vs. train time for various GNN architectures on the MUTAG dataset.
+
+<div class="centered">
+<img src="../images/pairplot-Training time-mean_accuracy.png" alt="Test accuracy vs Train time on MUTAG" width="100%" />
+</div>
+
+# Test Accuracy vs Homophily
+
+The plot below shows the test accuracy vs. homophily for various GNN architectures on the four datasets.
+
+<div style="text-align: center">
+  <img src="../images/pairplot-homophily-mean_accuracy.png" alt="Test accuracy vs Homophily" width="100%" />
+</div>
+
+# Results by Pooling
+
+The table below shows the results of our experiments with various pooling methods for GNNs.
+
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-size: 18px;
+}
+th, td {
+  text-align: left;
+  padding: 5px;
+}
+th {
+  background-color: #f2f2f2;
+}
+.table-container {
+  overflow-x: auto;
+}
+</style>
+
+<div class="table-container">
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>ENZYMES</th>
+      <th>MUTAG</th>
+      <th>NCI1</th>
+      <th>PROTEINS</th>
+      <th>Train time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">EDGE</td>
+      <td>GCN</td>
+      <td>0.294 ± 0.026</td>
+      <td>0.703 ± 0.081</td>
+      <td>0.717 ± 0.015</td>
+      <td><b>0.753 ± 0.024</b></td>
+      <td>1327</td>
+    </tr>
+    <tr>
+      <td>GIN</td>
+      <td><b>0.353 ± 0.039</b></td>
+      <td><b>0.847 ± 0.063</b></td>
+      <td>0.735 ± 0.010</td>
+      <td>0.731 ± 0.017</td>
+      <td>1156</td>
+    </tr>
+    <tr>
+      <td>MEWIS</td>
+      <td>GIN</td>
+      <td>0.309 ± 0.055</td>
+      <td>0.789 ± 0.077</td>
+      <td><b>0.744 ± 0.006</b></td>
+      <td>0.743 ± 0.016</td>
+      <td>4365</td>
+    </tr>
+    <tr>
+      <td rowspan="2">None</td>
+      <td>GCN</td>
+      <td>0.316 ± 0.044</td>
+      <td>0.703 ± 0.065</td>
+      <td>0.651 ± 0.015</td>
+      <td>0.743 ± 0.029</td>
+      <td>40</td>
+    </tr>
+    <tr>
+      <td>GIN</td>
+      <td>0.327 ± 0.042</td>
+      <td>0.803 ± 0.068</td>
+      <td>0.734 ± 0.018</td>
+      <td>0.733 ± 0.028</td>
+      <td>59</td>
+    </tr>
+    <tr>
+      <td rowspan="3">SAG</td>
+      <td>GAT</td>
+      <td>0.189 ± 0.025</td>
+      <td>0.676 ± 0.062</td>
+      <td>0.617 ± 0.024</td>
+      <td>0.722 ± 0.050</td>
+      <td>112</td>
+    </tr>
+    <tr>
+      <td>GCN</td>
+      <td>0.195 ± 0.033</td>
+      <td>0.682 ± 0.073</td>
+      <td>0.630 ± 0.021</td>
+      <td>0.689 ± 0.041</td>
+      <td>53</td>
+    </tr>
+    <tr>
+      <td>GIN</td>
+      <td>0.188 ± 0.040</td>
+      <td>0.761 ± 0.081</td>
+      <td>0.639 ± 0.036</td>
+      <td>0.714 ± 0.039</td>
+      <td>59</td>
+    </tr>
+    <tr>
+      <td rowspan="3">TOPK</td>
+      <td>GAT</td>
+      <td>0.208 ± 0.054</td>
+      <td>0.689 ± 0.093</td>
+      <td>0.623 ± 0.045</td>
+      <td>0.682 ± 0.033</td>
+      <td>110</td>
+    </tr>
+    <tr>
+      <td>GCN</td>
+      <td>0.176 ± 0.035</td>
+      <td>0.739 ± 0.075</td>
+      <td>0.631 ± 0.034</td>
+      <td>0.694 ± 0.032</td>
+      <td>55</td>
+    </tr>
+    <tr>
+      <td>GIN</td>
+      <td>0.205 ± 0.056</td>
+      <td>0.761 ± 0.079</td>
+      <td>0.617 ± 0.033</td>
+      <td>0.697 ± 0.027</td>
+      <td>56</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Best architecture per pooling:</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Dataset</th>
+      <th>ENZYMES</th>
+      <th>MUTAG</th>
+      <th>NCI1</th>
+      <th>PROTEINS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>EDGE</td>
+      <td><b>GIN</b></td>
+      <td><b>GIN</b></td>
+      <td>GIN</td>
+      <td><b>GCN</b></td>
+    </tr>
+    <tr>
+      <td>MEWIS</td>
+      <td>GIN</td>
+      <td>GIN</td>
+      <td><b>GIN</b></td>
+      <td>GIN</td>
+    </tr>
+    <tr>
+      <td>None</td>
+      <td>GIN</td>
+      <td>GIN</td>
+      <td>GIN</td>
+      <td>GCN</td>
+    </tr>
+    <tr>
+      <td>SAG</td>
+      <td>GCN</td>
+      <td>GIN</td>
+      <td>GIN</td>
+      <td>GAT</td>
+    </tr>
+    <tr>
+      <td>TOPK</td>
+      <td>GAT</td>
+      <td>GIN</td>
+      <td>GCN</td>
+      <td>GIN</td>
+    </tr>
+  </tbody>
+</table>
+
+# Results by Architecture
+
+The table below shows the results of our experiments with various GNN architectures.
+
+|     |      | ENZYMES | MUTAG | NCI1 | PROTEINS | Total Time |
+| --- | --- | --- | --- | --- | --- | --- |
+| GAT | MEWIS | $0.295	\pm0.040$ | $0.742	\pm0.086$ | $0.693	\pm0.008$ | $0.722	\pm0.022$ | 3225 |
+|  | None | $0.310	\pm0.053$ | $0.679	\pm0.087$ | $0.659	\pm0.023$ | $0.734	\pm0.027$ | 90 |
+| GCN | EDGE | $0.294	\pm0.026$ | $0.703	\pm0.081$ | $0.717	\pm0.015$ | **$0.753	\pm0.024$** | 1327 |
+|  | None | $0.316	\pm0.044$ | $0.703	\pm0.065$ | $0.651	\pm0.015$ | $0.743	\pm0.029$ | 40 |
+|  | TOPK | $0.176	\pm0.035$ | $0.739	\pm0.075$ | $0.631	\pm0.034$ | $0.694	\pm0.032$ | 55 |
+| GIN | EDGE | **$0.353	\pm0.039$** | **$0.847	\pm0.063$** | $0.735	\pm0.010$ | $0.731	\pm0.017$ | 1156 |
+|  | MEWIS | $0.309	\pm0.055$ | $0.789	\pm0.077$ | **$0.744	\pm0.006$** | $0.743	\pm0.016$ | 4365 |
+
+The best pooling method for each architecture is shown in the table below.
+
+| Dataset | ENZYMES | MUTAG | NCI1 | PROTEINS |
+| --- | --- | --- | --- | --- |
+| GAT | None | MEWIS | MEWIS | None |
+| GCN | None | TOPK | EDGE | **EDGE** |
+| GIN | **EDGE** | **EDGE** | **MEWIS** | MEWIS |
