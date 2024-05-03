@@ -1,14 +1,14 @@
-name: Spellcheck Action
-on: 
-  push:
+name: spellcheck
+on:
   pull_request:
-
 jobs:
-  build:
-    name: Spellcheck
+  check-spelling:
     runs-on: ubuntu-latest
     steps:
-    # The checkout step
-    - uses: actions/checkout@v3
-    - uses: rojopolis/spellcheck-github-actions@0.36.0
-      name: Spellcheck
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Check Spelling
+        uses: rojopolis/spellcheck-github-actions@0.36.0
+        with:
+          config_path: .spellcheck.yml
+          task_name: Markdown
